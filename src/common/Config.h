@@ -11,6 +11,8 @@
 namespace config {
 	//gamestate
 	extern unsigned int height, width, iterations_per_sec;
+	//player
+	extern unsigned int initial_zoom;
 	//screen
 	extern unsigned int frameratelimit, screen_height, screen_width;
 

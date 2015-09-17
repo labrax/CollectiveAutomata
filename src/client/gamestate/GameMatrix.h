@@ -9,6 +9,7 @@
 #define SRC_CLIENT_GAMESTATE_GAMEMATRIX_H_
 
 #include <ctime>
+#include <vector>
 
 class GameMatrix {
 private:
@@ -18,6 +19,7 @@ private:
 	unsigned int iteration; //these two will be used to keep in sync with the server
 	time_t refTime;
 
+	std::vector< std::pair<unsigned char, int> > getNeighbours(unsigned int x, unsigned int y);
 	void runIteration();
 public:
 	GameMatrix(unsigned int width, unsigned int height);

@@ -10,8 +10,8 @@
 #include "../../common/Config.h"
 
 #include <cstdlib>
-#include <ctime>
 #include <cmath>
+#include <algorithm>
 
 GameMatrix::GameMatrix(unsigned int width, unsigned int height) : width(width), height(height)
 {
@@ -75,6 +75,32 @@ void GameMatrix::setMatrix(unsigned char * other, unsigned int width, unsigned i
 	this->refTime = refTime;
 }
 
+bool comp(const std::pair<unsigned char, int> & a, const std::pair<unsigned char, int> & b)
+{
+	if(a.second >= b.second)
+		return true;
+	return false;
+}
+
+std::vector< std::pair<unsigned char, int> > GameMatrix::getNeighbours(unsigned int x, unsigned int y)
+{
+	std::vector< std::pair <unsigned char, int> > neighbours;
+	for(unsigned int i = y-1; i <= y+1; i++)
+	{
+		for(unsigned int j = x-1; j <= x+1; j++)
+		{
+			if(i == y && j == x)
+				continue;
+			if(i < 0 || i >= height || j < 0 || j >= width)
+				continue;
+			//TODO: percorrer neighbours procurando o elemento, incrementar
+		}
+	}
+	//ordena pelo segundo
+	std::sort(neighbours.begin(), neighbours.end(), comp);
+	return neighbours;
+}
+
 void GameMatrix::runIteration()
 {
 	unsigned char * new_matrix = new unsigned char[width*height];
@@ -98,7 +124,6 @@ void GameMatrix::runIteration()
 
 void GameMatrix::compute()
 {
-	return;
 	time_t currTime = time(NULL);
 	unsigned int currIteration = floor((currTime - refTime)/config::iterations_per_sec);
 	if(currIteration > iteration )

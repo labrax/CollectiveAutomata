@@ -11,7 +11,8 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <cstdio>
 
-Screen::Screen() {
+Screen::Screen()
+{
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 
 	window = new sf::RenderWindow(sf::VideoMode(config::screen_width, config::screen_height), "SFML works!");
@@ -21,19 +22,24 @@ Screen::Screen() {
 	all_rectangles = new sf::VertexArray(sf::Quads);
 }
 
-Screen::~Screen() {
+Screen::~Screen()
+{
 	delete(all_rectangles);
 	delete(window);
 }
 
-void Screen::drawObjects(GameMatrix * gm, PlayerState * ps) {
+void Screen::poolScreenEvents(InputHandler * ih)
+{
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 			window->close();
 	}
+}
 
+void Screen::drawObjects(GameMatrix * gm, PlayerState * ps)
+{
 	window->clear();
 
 	//all_rectangles->clear();

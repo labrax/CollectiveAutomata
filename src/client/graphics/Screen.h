@@ -8,6 +8,7 @@
 #ifndef SRC_CLIENT_GRAPHICS_SCREEN_H_
 #define SRC_CLIENT_GRAPHICS_SCREEN_H_
 
+#include "../control/InputHandler.h"
 #include "../gamestate/PlayerState.h"
 #include "../gamestate/GameMatrix.h"
 
@@ -20,6 +21,7 @@ private:
 public:
 	Screen();
 	virtual ~Screen();
+	void poolScreenEvents(InputHandler * ih);
 	void drawObjects(GameMatrix * gm, PlayerState * ps);
 	bool isOpen();
 };

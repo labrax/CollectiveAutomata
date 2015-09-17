@@ -7,12 +7,13 @@
 
 #include "InputHandler.h"
 
-InputHandler::InputHandler() {
-	// TODO Auto-generated constructor stub
+InputHandler::InputHandler(PlayerState * ps) : ps(ps)
+{
 
 }
 
-InputHandler::~InputHandler() {
-	// TODO Auto-generated destructor stub
+InputHandler::~InputHandler()
+{
+
 }
 

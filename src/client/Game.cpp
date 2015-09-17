@@ -12,8 +12,8 @@ Game::Game() {
 	gm = new GameMatrix(config::width, config::height);
 	gm->randomFill();
 	screen = new Screen();
-	ih = new InputHandler();
 	ps = new PlayerState();
+	ih = new InputHandler(ps);
 	net = new Network();
 }
 
@@ -32,6 +32,7 @@ void Game::run() {
 		//gamematrix
 		gm->compute();
 		//input
+		screen->poolScreenEvents(ih);
 		//screen
 		screen->drawObjects(gm, ps);
 		if(screen->isOpen() == false)
