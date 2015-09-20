@@ -13,6 +13,7 @@ PlayerState::PlayerState()
 	tileZoom = config::initial_zoom;
 	dx = 0;
 	dy = 0;
+	exit = false;
 }
 
 PlayerState::~PlayerState()
@@ -30,8 +31,10 @@ unsigned int PlayerState::getTileZoom()
 	return tileZoom;
 }
 
-void PlayerState::setPos(unsigned int dx, unsigned int dy)
+void PlayerState::setPos(int dx, int dy)
 {
+	if(this->dx != dx || this->dy != dy)
+		moved = true;
 	this->dx = dx;
 	this->dy = dy;
 }
@@ -44,4 +47,24 @@ long PlayerState::getPosX()
 long PlayerState::getPosY()
 {
 	return dy;
+}
+
+void PlayerState::setExit()
+{
+	this->exit = true;
+}
+
+bool PlayerState::isExit()
+{
+	return exit;
+}
+
+bool PlayerState::isMoved()
+{
+	if(moved == true)
+	{
+		moved = false;
+		return true;
+	}
+	return moved;
 }

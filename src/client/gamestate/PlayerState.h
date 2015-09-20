@@ -11,15 +11,20 @@
 class PlayerState {
 private:
 	unsigned int tileZoom;
-	long dx, dy;
+	int dx, dy;
+
+	bool exit, moved;
 public:
 	PlayerState();
 	virtual ~PlayerState();
 	void setTileZoom(unsigned int zoom);
 	unsigned int getTileZoom();
-	void setPos(unsigned int dx, unsigned int dy);
+	void setPos(int dx, int dy);
 	long getPosX();
 	long getPosY();
+	void setExit();
+	bool isExit();
+	bool isMoved();
 };
 
 #endif /* SRC_CLIENT_GAMESTATE_PLAYERSTATE_H_ */

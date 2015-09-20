@@ -15,12 +15,13 @@ class GameMatrix {
 private:
 	unsigned int width, height;
 	unsigned char * matrix;
+	unsigned char * new_matrix;
 
 	unsigned int iteration; //these two will be used to keep in sync with the server
 	time_t refTime;
 
-	std::vector< std::pair<unsigned char, int> > getNeighbours(unsigned int x, unsigned int y);
-	void runIteration();
+	inline std::vector< std::pair<unsigned char, int> > * getNeighbours(unsigned int x, unsigned int y);
+	inline void runIteration();
 public:
 	GameMatrix(unsigned int width, unsigned int height);
 	virtual ~GameMatrix();

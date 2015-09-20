@@ -9,13 +9,20 @@
 #define SRC_CLIENT_CONTROL_INPUTHANDLER_H_
 
 #include "../gamestate/PlayerState.h"
+#include "../graphics/Screen.h"
+
+#include <SFML/Window/Event.hpp>
 
 class InputHandler {
 private:
 	PlayerState * ps;
+
+	bool mouse_move;
+	unsigned int mouse_x, mouse_y;
 public:
 	InputHandler(PlayerState * ps);
 	virtual ~InputHandler();
+	void poolEvents(Screen * screen);
 };
 
 #endif /* SRC_CLIENT_CONTROL_INPUTHANDLER_H_ */
