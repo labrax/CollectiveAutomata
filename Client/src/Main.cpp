@@ -5,7 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "Game.h"
+#include "Game.hpp"
 
 int main(void)
 {

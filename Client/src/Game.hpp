@@ -8,11 +8,14 @@
 #ifndef SRC_CLIENT_GAME_H_
 #define SRC_CLIENT_GAME_H_
 
-#include "control/InputHandler.h"
-#include "gamestate/GameMatrix.h"
-#include "graphics/Screen.h"
-#include "gamestate/PlayerState.h"
-#include "../common/network/Network.h"
+#include <cstdio>
+
+#include "Config.hpp"
+
+#include "InputHandler.hpp"
+#include "GameMatrix.hpp"
+#include "Screen.hpp"
+#include "PlayerState.hpp"
 
 class Game {
 private:
@@ -20,7 +23,7 @@ private:
 	Screen * screen;
 	InputHandler * ih;
 	PlayerState * ps;
-	Network * net;
+	//Network * net;
 public:
 	Game();
 	virtual ~Game();

@@ -10,6 +10,11 @@
 
 #include <ctime>
 #include <vector>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+
+#include "Config.hpp"
 
 class GameMatrix {
 private:

@@ -8,6 +8,8 @@
 #ifndef SRC_CLIENT_GAMESTATE_PLAYERSTATE_H_
 #define SRC_CLIENT_GAMESTATE_PLAYERSTATE_H_
 
+#include "Config.hpp"
+
 class PlayerState {
 private:
 	unsigned int tileZoom;

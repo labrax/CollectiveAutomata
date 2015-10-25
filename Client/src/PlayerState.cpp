@@ -5,8 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "PlayerState.h"
-#include "../../common/Config.h"
+#include "PlayerState.hpp"
 
 PlayerState::PlayerState()
 {

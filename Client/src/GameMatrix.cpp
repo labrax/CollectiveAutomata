@@ -5,13 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "GameMatrix.h"
-
-#include "../../common/Config.h"
-
-#include <cstdlib>
-#include <cmath>
-#include <algorithm>
+#include "GameMatrix.hpp"
 
 GameMatrix::GameMatrix(unsigned int width, unsigned int height) : width(width), height(height)
 {
@@ -54,7 +48,7 @@ void GameMatrix::randomFill()
 	{
 		for(unsigned int j = 0; j < width; j++)
 		{
-			unsigned char elem = (unsigned char) rand()%4;
+			unsigned char elem = (unsigned char) rand()%2;
 			matrix[i*width + j] = elem;
 		}
 	}

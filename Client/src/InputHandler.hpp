@@ -8,10 +8,11 @@
 #ifndef SRC_CLIENT_CONTROL_INPUTHANDLER_H_
 #define SRC_CLIENT_CONTROL_INPUTHANDLER_H_
 
-#include "../gamestate/PlayerState.h"
-#include "../graphics/Screen.h"
-
+#include <cstdio>
 #include <SFML/Window/Event.hpp>
+
+#include "PlayerState.hpp"
+#include "Screen.hpp"
 
 class InputHandler {
 private:

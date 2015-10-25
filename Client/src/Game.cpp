@@ -5,9 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "../common/Config.h"
-#include "Game.h"
-#include <cstdio>
+#include "Game.hpp"
 
 Game::Game() {
 	gm = new GameMatrix(config::width, config::height);
@@ -15,7 +13,7 @@ Game::Game() {
 	screen = new Screen();
 	ps = new PlayerState();
 	ih = new InputHandler(ps);
-	net = new Network();
+	//net = new Network();
 }
 
 Game::~Game() {
@@ -23,7 +21,7 @@ Game::~Game() {
 	delete(screen);
 	delete(gm);
 	delete(ps);
-	delete(net);
+	//delete(net);
 }
 
 void Game::run() {
@@ -49,7 +47,7 @@ void Game::run() {
 		sf::Time elapsedTime = clock.restart();
 		if(elapsedTime < config::time_per_frame)
 		{
-			sf::sleep(config::time_per_frame - elapsedTime);
+			sf::sleep(config::time_per_frame - elapsedTime); //TODO: corrigir com o fps
 		}
 	}
 }

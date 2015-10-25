@@ -5,8 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "InputHandler.h"
-#include <cstdio>
+#include "InputHandler.hpp"
 
 InputHandler::InputHandler(PlayerState * ps) : ps(ps)
 {

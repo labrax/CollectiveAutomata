@@ -5,12 +5,7 @@
  *      Author: Victor R. Cardoso
  */
 
-#include "Screen.h"
-#include "../../common/Config.h"
-#include <SFML/Window/VideoMode.hpp>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/OpenGL.hpp>
-#include <cstdio>
+#include "Screen.hpp"
 
 Screen::Screen()
 {

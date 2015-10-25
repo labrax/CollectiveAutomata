@@ -1,6 +1,3 @@
 *.o*
 *.d*
-ClientProject/Debug/*
-ClientProject/Release/*
-ServerProject/Debug/*
-ServerProject/Release/*
+Client/client
