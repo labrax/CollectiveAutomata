@@ -7,11 +7,10 @@
 
 #include "GameMatrix.hpp"
 
-GameMatrix::GameMatrix(unsigned int width, unsigned int height) : width(width), height(height)
+GameMatrix::GameMatrix(unsigned int width, unsigned int height) : width(width), height(height), iteration(0)
 {
 	matrix = new unsigned char[height*width];
 	new_matrix = new unsigned char[height*width];
-	iteration = 0;
 	refTime = time(NULL);
 }
 
@@ -31,14 +30,18 @@ unsigned int GameMatrix::getHeight()
 	return height;
 }
 
-unsigned char * GameMatrix::getMatrix()
+unsigned char * & GameMatrix::getMatrix()
 {
 	return matrix;
 }
 
-unsigned char GameMatrix::getElem(unsigned int x, unsigned int y)
+inline unsigned char & GameMatrix::getElem(unsigned int x, unsigned int y)
 {
-	return matrix[y*width + x];
+	if(x >= 0 && x < width && y >= 0 && y < height)
+		return matrix[y*width + x];
+	
+	unsigned char nil = 0;
+	return nil;
 }
 
 void GameMatrix::randomFill()
@@ -71,73 +74,43 @@ void GameMatrix::setMatrix(unsigned char * other, unsigned int width, unsigned i
 	this->refTime = refTime;
 }
 
-bool comp(const std::pair<unsigned char, int> & a, const std::pair<unsigned char, int> & b)
-{
-	if(a.second >= b.second)
-		return true;
-	return false;
-}
-
-std::vector< std::pair<unsigned char, int> > * GameMatrix::getNeighbours(unsigned int x, unsigned int y)
-{
-	std::vector< std::pair <unsigned char, int> > * neighbours = new std::vector< std::pair <unsigned char, int> >();
-	for(int i = (int)y-1; i <= (int)y+1; i++)
-	{
-		for(int j = (int)x-1; j <= (int)x+1; j++)
-		{
-			if(i == (int)y && j == (int)x)
-				continue;
-			if(i < 0 || i >= (int) height || j < 0 || j >= (int) width)
-				continue;
-
-			std::vector< std::pair <unsigned char, int> >::iterator it;
-			for(it = neighbours->begin(); it != neighbours->end(); it++)
-			{
-				if((*it).first == matrix[i*width + j])
-				{
-					(*it).second++;
-					break;
-				}
-			}
-
-			if(it == neighbours->end())
-			{
-				neighbours->insert(neighbours->end(), std::pair<unsigned char, int>(matrix[i*width + j], 1));
-			}
-
-		}
-	}
-	//ordena pelo segundo
-	std::sort(neighbours->begin(), neighbours->end(), comp);
-
-	return neighbours;
-}
-
 void GameMatrix::runIteration()
 {
+#pragma omp parallel for
 	for(unsigned int i = 0; i < height; i++)
 	{
 		for(unsigned int j = 0; j < width; j++)
 		{
-			std::vector< std::pair<unsigned char, int> > * neighbours = getNeighbours(j, i);
-
-			unsigned int amount_life = 0;
-
-			for(unsigned int k = 0; k < neighbours->size(); k++)
+			int amount_each[256];
+			memset(amount_each, 0, sizeof(int) * 256);
+			int amount_max = 0;
+			int index_max = 0;
+			
+			int amount_life = 0;
+			
+			for(unsigned int k = i-1; k <= i+1; k++)
 			{
-				if( (*neighbours)[k].first != 0 )
-					amount_life += (*neighbours)[k].second;
-				//printf("%c: %d\n", (*neighbours)[k].first + '0', (*neighbours)[k].second);
-			}
+				for(unsigned int l = j-1; l <= j+1; l++)
+				{
+					if(k == i && l == j)
+						continue;
 
-			//printf("amount_life: %d\n", amount_life);
-
-			unsigned char next_element = 0;
-			if((*neighbours)[0].first == 0)
-			{
-				if(neighbours->size() > 1)
-					next_element = (*neighbours)[1].first;
+					unsigned char e = getElem(l, k);
+					amount_each[e]++;
+					
+					if(e > 0)
+					{
+						if(amount_each[e] > amount_max)
+						{
+							amount_max = amount_each[e];
+							index_max = e;
+						}
+						amount_life++;
+					}
+				}
 			}
+			
+			unsigned char next_element = index_max;
 
 			if(matrix[i*width + j] == 0) //se estava morto
 			{
@@ -149,12 +122,10 @@ void GameMatrix::runIteration()
 			else //se estava vivo
 			{
 				if(amount_life >= 2 && amount_life <= 3) //continua vivo com o que tinha antes
-					new_matrix[i*width + j] = matrix[i*width + j]; //outra opção é: (*neighbours)[0].first //quem teve mais participação mantém
+					new_matrix[i*width + j] = matrix[i*width + j];
 				else //morre
 					new_matrix[i*width + j] = 0;
 			}
-
-			delete(neighbours);
 		}
 	}
 
