@@ -7,12 +7,9 @@
 
 #include "PlayerState.hpp"
 
-PlayerState::PlayerState()
+PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(0), mouse_y(0), exit(false)
 {
-	tileZoom = config::initial_zoom;
-	dx = 0;
-	dy = 0;
-	exit = false;
+	
 }
 
 PlayerState::~PlayerState()
@@ -66,4 +63,20 @@ bool PlayerState::isMoved()
 		return true;
 	}
 	return moved;
+}
+
+void PlayerState::setMouse(long x, long y)
+{
+	this->mouse_x = x;
+	this->mouse_y = y;
+}
+
+long PlayerState::getMouseX()
+{
+	return mouse_x;
+}
+
+long PlayerState::getMouseY()
+{
+	return mouse_y;
 }

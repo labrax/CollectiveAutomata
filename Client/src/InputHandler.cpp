@@ -49,13 +49,19 @@ void InputHandler::poolEvents(Screen * screen)
 		{
 			if(event.mouseWheel.delta < 0)
 			{
-				if(ps->getTileZoom() + event.mouseWheel.delta >= 1)
-					ps->setTileZoom(ps->getTileZoom() + event.mouseWheel.delta);
+				if(ps->getTileZoom() + event.mouseWheel.delta >= 5)
+				{
+					unsigned int curr_zoom = ps->getTileZoom();
+					ps->setTileZoom(curr_zoom + event.mouseWheel.delta);
+				}
 			}
 			else
 			{
-				if(ps->getTileZoom() + event.mouseWheel.delta <= 30)
-					ps->setTileZoom(ps->getTileZoom() + event.mouseWheel.delta);
+				if(ps->getTileZoom() + event.mouseWheel.delta <= 50)
+				{
+					unsigned int curr_zoom = ps->getTileZoom();
+					ps->setTileZoom(curr_zoom + event.mouseWheel.delta);
+				}
 			}
 
 			//screen->getWindow()->getSize().x/2;
@@ -88,9 +94,9 @@ void InputHandler::poolEvents(Screen * screen)
 				//int screen_X = screen->getWindow()->getSize().x;
 				//int screen_Y = screen->getWindow()->getSize().y;
 
-
 				ps->setPos(mouse_x - event.mouseMove.x, mouse_y - event.mouseMove.y);
 			}
+			ps->setMouse(event.mouseMove.x, event.mouseMove.y);
 		}
 	}
 

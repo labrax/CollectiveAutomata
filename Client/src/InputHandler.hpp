@@ -8,7 +8,6 @@
 #ifndef SRC_CLIENT_CONTROL_INPUTHANDLER_H_
 #define SRC_CLIENT_CONTROL_INPUTHANDLER_H_
 
-#include <cstdio>
 #include <SFML/Window/Event.hpp>
 
 #include "PlayerState.hpp"

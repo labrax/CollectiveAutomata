@@ -18,12 +18,14 @@
 #include "PlayerState.hpp"
 #include "GameMatrix.hpp"
 #include "Config.hpp"
+#include "Console.hpp"
 
 class Screen {
 private:
 	sf::RenderWindow * window;
 	sf::VertexArray * m_vertices;
 	unsigned int width, height;
+	int moved_x, moved_y;
 	bool paused;
 public:
 	Screen();

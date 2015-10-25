@@ -13,7 +13,8 @@
 class PlayerState {
 private:
 	unsigned int tileZoom;
-	int dx, dy;
+	long dx, dy;
+	long mouse_x, mouse_y;
 
 	bool exit, moved;
 public:
@@ -27,6 +28,9 @@ public:
 	void setExit();
 	bool isExit();
 	bool isMoved();
+	void setMouse(long x, long y);
+	long getMouseX();
+	long getMouseY();
 };
 
 #endif /* SRC_CLIENT_GAMESTATE_PLAYERSTATE_H_ */
