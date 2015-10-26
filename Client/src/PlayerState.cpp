@@ -7,7 +7,7 @@
 
 #include "PlayerState.hpp"
 
-PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(0), mouse_y(0), exit(false)
+PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(-100), mouse_y(-100), exit(false)
 {
 	
 }
@@ -27,7 +27,7 @@ unsigned int PlayerState::getTileZoom()
 	return tileZoom;
 }
 
-void PlayerState::setPos(int dx, int dy)
+void PlayerState::setPos(float dx, float dy)
 {
 	if(this->dx != dx || this->dy != dy)
 		moved = true;
@@ -35,12 +35,12 @@ void PlayerState::setPos(int dx, int dy)
 	this->dy = dy;
 }
 
-long PlayerState::getPosX()
+float PlayerState::getPosX()
 {
 	return dx;
 }
 
-long PlayerState::getPosY()
+float PlayerState::getPosY()
 {
 	return dy;
 }

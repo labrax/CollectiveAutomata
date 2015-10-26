@@ -13,7 +13,7 @@
 class PlayerState {
 private:
 	unsigned int tileZoom;
-	long dx, dy;
+	float dx, dy;
 	long mouse_x, mouse_y;
 
 	bool exit, moved;
@@ -22,9 +22,9 @@ public:
 	virtual ~PlayerState();
 	void setTileZoom(unsigned int zoom);
 	unsigned int getTileZoom();
-	void setPos(int dx, int dy);
-	long getPosX();
-	long getPosY();
+	void setPos(float dx, float dy);
+	float getPosX();
+	float getPosY();
 	void setExit();
 	bool isExit();
 	bool isMoved();

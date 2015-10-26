@@ -61,10 +61,6 @@ void Screen::drawObjects(GameMatrix * gm, PlayerState * ps)
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	//m_vertices.clear();
-	//m_vertices->resize(gm->getWidth() * gm->getHeight() * 4);
-
 	unsigned int TILE_SIZE = ps->getTileZoom(); //pegar do jogador
 	
 	//will only draw where is visible!
@@ -82,10 +78,16 @@ void Screen::drawObjects(GameMatrix * gm, PlayerState * ps)
 	if(end_y >= gm->getHeight())
 		end_y = gm->getHeight()-1;
 
+	//Console::getConsole().log("%d %d\n", moved_x, moved_y);
+	//Console::getConsole().log("%f %f %f %f ", (float) moved_x/(TILE_SIZE+1), (float) (width+moved_x)/(TILE_SIZE+1)+1, (float) moved_y/(TILE_SIZE+1), (float) (height+moved_y)/(TILE_SIZE+1)+1);
+
+	//Console::getConsole().log("%u %u %u %u\n", begin_x, begin_y, end_x, end_y);
 	
+	unsigned int e_X = (moved_x+ps->getMouseX())/(TILE_SIZE+1);
+	unsigned int e_Y = (moved_y+ps->getMouseY())/(TILE_SIZE+1);
+	
+	m_vertices->clear();
 	m_vertices->resize((end_x - begin_x + 1) * (end_y - begin_y + 1) * 4);
-		
-	//Console::getConsole().log("%u %u %u %u\n", begin_x, end_y, begin_y, end_y);
 
 	for(unsigned int i = begin_y; i < end_y; i++)
 	{
@@ -112,6 +114,9 @@ void Screen::drawObjects(GameMatrix * gm, PlayerState * ps)
 				color = sf::Color::Blue;
 				break;
 			}
+			
+			if(e_X == j && e_Y == i)
+				color = sf::Color::Yellow;
 
 			/*unsigned int index = i*j*4;
 			if(m_vertices[index].color != color)
@@ -158,10 +163,10 @@ void Screen::drawObjects(GameMatrix * gm, PlayerState * ps)
 	window->display();
 }
 
-void Screen::updateViewCenter(int dx, int dy)
+void Screen::updateViewCenter(float dx, float dy)
 {
-	moved_x = dx;
-	moved_y = dy;
+	moved_x = (int) dx;
+	moved_y = (int) dy;
 	
 	sf::View view = window->getView();
 	view.setCenter((float) width/2 + dx, (float) height/2 + dy);
@@ -195,4 +200,14 @@ void Screen::stopDraw()
 void Screen::resumeDraw()
 {
 	paused = false;
+}
+
+unsigned int Screen::getWidth()
+{
+	return width;
+}
+
+unsigned int Screen::getHeight()
+{
+	return height;
 }

@@ -12,13 +12,17 @@
 
 #include "PlayerState.hpp"
 #include "Screen.hpp"
+#include "Console.hpp"
+
+#define MIN_SIZE 5
+#define MAX_SIZE 50
 
 class InputHandler {
 private:
 	PlayerState * ps;
 
 	bool mouse_move;
-	unsigned int mouse_x, mouse_y;
+	float mouse_x, mouse_y;
 public:
 	InputHandler(PlayerState * ps);
 	virtual ~InputHandler();

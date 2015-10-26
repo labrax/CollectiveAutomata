@@ -16,7 +16,7 @@ namespace config
 	unsigned int height = 450, width = 800, iterations_per_sec = 1;
 
 	//player
-	unsigned int initial_zoom = 4;
+	unsigned int initial_zoom = 10;
 
 	//screen
 	unsigned int frameratelimit = 50, screen_height = 600, screen_width = 800;

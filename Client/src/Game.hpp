@@ -8,8 +8,7 @@
 #ifndef SRC_CLIENT_GAME_H_
 #define SRC_CLIENT_GAME_H_
 
-#include <cstdio>
-
+#include "Console.hpp"
 #include "Config.hpp"
 
 #include "InputHandler.hpp"

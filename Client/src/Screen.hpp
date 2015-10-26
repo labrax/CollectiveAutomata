@@ -32,11 +32,13 @@ public:
 	virtual ~Screen();
 	void prepareScreen(GameMatrix * gm, PlayerState * ps);
 	void drawObjects(GameMatrix * gm, PlayerState * ps);
-	void updateViewCenter(int dx, int dy);
+	void updateViewCenter(float dx, float dy);
 	void updateScreenSize(unsigned int width, unsigned int height, int dx, int dy);
 	sf::RenderWindow * getWindow();
 	void stopDraw();
 	void resumeDraw();
+	unsigned int getWidth();
+	unsigned int getHeight();
 };
 
 #endif /* SRC_CLIENT_GRAPHICS_SCREEN_H_ */

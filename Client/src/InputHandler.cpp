@@ -47,29 +47,23 @@ void InputHandler::poolEvents(Screen * screen)
 		}
 		else if (event.type == sf::Event::MouseWheelMoved)
 		{
-			if(event.mouseWheel.delta < 0)
+			if(event.mouseWheel.delta != 0)
 			{
-				if(ps->getTileZoom() + event.mouseWheel.delta >= 5)
+				if(ps->getTileZoom() + event.mouseWheel.delta >= 10 && ps->getTileZoom() + event.mouseWheel.delta <= 50)
 				{
+					unsigned int new_zoom = ps->getTileZoom() + event.mouseWheel.delta;
 					unsigned int curr_zoom = ps->getTileZoom();
-					ps->setTileZoom(curr_zoom + event.mouseWheel.delta);
+					
+					float e_dX = ((float) ps->getPosX() + ps->getMouseX())/(curr_zoom+1);
+					float e_dY = ((float) ps->getPosY() + ps->getMouseY())/(curr_zoom+1);
+					
+					float new_x = e_dX*(new_zoom+1) - ps->getMouseX();
+					float new_y = e_dY*(new_zoom+1) - ps->getMouseY();
+					
+					ps->setTileZoom(new_zoom);
+					ps->setPos(new_x, new_y);
 				}
 			}
-			else
-			{
-				if(ps->getTileZoom() + event.mouseWheel.delta <= 50)
-				{
-					unsigned int curr_zoom = ps->getTileZoom();
-					ps->setTileZoom(curr_zoom + event.mouseWheel.delta);
-				}
-			}
-
-			//screen->getWindow()->getSize().x/2;
-			//screen->getWindow()->getSize().y/2;
-
-		    /*std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
-		    std::cout << "mouse x: " << event.mouseWheel.x << std::endl;
-		    std::cout << "mouse y: " << event.mouseWheel.y << std::endl;*/
 		}
 		else if (event.type == sf::Event::MouseButtonPressed)
 		{
