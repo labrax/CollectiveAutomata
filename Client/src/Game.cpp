@@ -8,11 +8,14 @@
 #include "Game.hpp"
 
 Game::Game() {
-	gm = new GameMatrix(config::width, config::height);
+	gm = new GameMatrix(sf::Vector2f(0, 0), sf::Vector2f(0, 0), config::width, config::height);
 	gm->randomFill();
-	screen = new Screen();
+	screen = new Screen(gm);
+	
 	ps = new PlayerState();
 	ps->setCenter();
+	
+	gm->addElement(&(ps->getPlayerConsole()), false, false);
 	ih = new InputHandler(ps);
 	//net = new Network();
 }
@@ -35,13 +38,22 @@ void Game::run() {
 		gm->compute();
 		//input
 		ih->poolEvents(screen);
-		//screen
-		screen->draw(gm, ps);
 		
+		/*exchange messages*/
 		if(ps->getCenter())
 		{
 			ps->setPos(-((float) screen->getWidth()/2 - gm->getWidth()*(ps->getTileZoom()+1)/2), -((float) screen->getHeight()/2-gm->getHeight()*(ps->getTileZoom()+1)/2));
 		}
+		
+		if(ps->isMoved())
+		{
+			gm->prepareToMatrix(ps);
+		}
+		gm->updatePlayerPos(ps);
+		/*exchange messages*/
+		
+		//screen
+		screen->draw(gm, ps);
 		
 		if(ps->isExit())
 			isRunning = false;

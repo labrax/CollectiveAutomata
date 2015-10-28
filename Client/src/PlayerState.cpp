@@ -10,6 +10,7 @@
 PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(-100), mouse_y(-100), exit(false), moved(true), center(false), state(STATE_LOGO)
 {
 	player_console = PlayerConsole();
+	player_console.isVisible = false;
 }
 
 PlayerState::~PlayerState()
@@ -115,7 +116,8 @@ PlayerConsole & PlayerState::getPlayerConsole()
 }
 
 
-PlayerConsole::PlayerConsole() : visible(false)
+
+PlayerConsole::PlayerConsole() : UI::Element(sf::Vector2f(0, 0), sf::Vector2f(0, 0))
 {
 	
 }
@@ -123,4 +125,22 @@ PlayerConsole::PlayerConsole() : visible(false)
 PlayerConsole::~PlayerConsole()
 {
 	
+}
+
+void PlayerConsole::draw(sf::RenderWindow * window)
+{
+	if(isVisible)
+	{
+		drawRect(window, pos, size, config::color_inside, config::color_border);
+	}
+}
+
+void PlayerConsole::onEvent(sf::Event event)
+{
+	
+}
+
+void PlayerConsole::onResize(sf::Vector2f new_size)
+{
+	size = new_size;
 }

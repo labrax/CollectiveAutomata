@@ -20,12 +20,9 @@
 #include "Config.hpp"
 #include "Console.hpp"
 
-enum ALIGNMENT
-{
-	ALIGN_LEFT,
-	ALIGN_CENTER,
-	ALIGN_RIGHT
-};
+#include "GraphicsPrimitives.hpp"
+
+#include "UI.hpp"
 
 class Screen {
 private:
@@ -33,19 +30,11 @@ private:
 	sf::RenderWindow * window;
 	unsigned int width, height;
 	
-	//matrix renderer
-	sf::VertexArray * m_vertices;
-	int moved_x, moved_y;
-	
-	unsigned int TILE_SIZE;
-	unsigned int begin_x, begin_y, end_x, end_y;
-	
 	//pause rendering
 	bool paused;
-	
-	sf::Font gamefont;
+	UI::Element * drawable;
 public:
-	Screen();
+	Screen(UI::Element * drawable);
 	virtual ~Screen();
 	
 	sf::RenderWindow * getWindow();
@@ -56,25 +45,8 @@ public:
 	void resumeDraw();
 	
 	void draw(GameMatrix * gm, PlayerState * ps);
-	void prepareToMatrix(GameMatrix * gm, PlayerState * ps);
-	void drawMatrix(GameMatrix * gm, PlayerState * ps);
 	
-	void updateViewCenter(float dx, float dy);
 	void updateScreenSize(unsigned int width, unsigned int height);
-	
-	void drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, enum ALIGNMENT = ALIGN_LEFT);
-	void drawRect(sf::Vector2f pos, sf::Vector2f size, sf::Color inside_color, sf::Color border_color);
 };
 
-/*//TODO: remove
-class Drawable
-{
-private:
-	static Screen * screen;
-public:
-	void draw();
-};*/
-
-#include "UI.hpp"
-
-#endif /* SRC_CLIENT_GRAPHICS_SCREEN_H_ */
+#endif

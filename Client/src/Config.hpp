@@ -18,6 +18,7 @@ namespace config {
 	extern sf::Time time_per_frame;
 	//gamestate
 	extern unsigned int height, width, iterations_per_sec;
+	extern unsigned char uchar_nil;
 	//player
 	extern unsigned int initial_zoom;
 	//screen

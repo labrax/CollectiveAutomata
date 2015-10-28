@@ -14,6 +14,7 @@ namespace config
 
 	//gamestate
 	unsigned int height = 30, width = 40, iterations_per_sec = 1;
+	unsigned char uchar_nil = 0;
 
 	//player
 	unsigned int initial_zoom = 10;

@@ -10,10 +10,11 @@
 
 #include "Config.hpp"
 #include "Console.hpp"
-#include <string>
 
-#include <vector>
+#include "UI.hpp"
+
 #include <string>
+#include <vector>
 
 enum GameState
 {
@@ -23,13 +24,16 @@ enum GameState
 	STATE_END
 };
 
-class PlayerConsole
+class PlayerConsole : public UI::Element
 {
 public:
 	std::vector<std::string> str;
-	bool visible;
 	PlayerConsole();
 	~PlayerConsole();
+	
+	void draw(sf::RenderWindow * window);
+	void onEvent(sf::Event event);
+	void onResize(sf::Vector2f new_size);
 };
 
 class PlayerState {

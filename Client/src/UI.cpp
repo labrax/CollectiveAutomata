@@ -9,7 +9,7 @@
 
 namespace UI
 {
-	Manager::Manager()
+	/*Manager::Manager()
 	{
 		
 	}
@@ -22,13 +22,22 @@ namespace UI
 		static Manager * instance = new Manager();
 		return *instance;
 	}
-	Screen * Manager::getScreen()
+	sf::RenderWindow * Manager::getWindow()
 	{
-		return screen;
+		return window;
 	}
-	void Manager::setScreen(Screen * screen)
+	void Manager::setWindow(sf::RenderWindow * window)
 	{
-		this->screen = screen;
+		this->window = window;
+	}*/
+	
+	Element::Element(sf::Vector2f pos, sf::Vector2f size) : pos(pos), size(size), parent(NULL), isVisible(true)
+	{
+		
+	}
+	Element::~Element()
+	{
+		
 	}
 	
 	Window::Window(sf::Vector2f pos, sf::Vector2f size, std::string name) : Element(pos, size), name(name)
@@ -42,7 +51,7 @@ namespace UI
 	
 	void Window::addElement(Element * element, bool horizontal_spacing, bool vertical_spacing)
 	{
-		Console::getConsole().log("Window has %lu elements!\n", elements.size());
+		//Console::getConsole().log("Window has %lu elements!\n", elements.size());
 		
 		if(elements.size() == 0)
 		{
@@ -59,30 +68,36 @@ namespace UI
 				element->pos.y = elements[elements.size()-1]->pos.y + elements[elements.size()-1]->size.y + 10;
 			else
 				element->pos.y = elements[elements.size()-1]->pos.y;
+			elements.insert(elements.end(), element);
 		}
-		elements.insert(elements.end(), element);
 	}
 	
-	void Window::draw()
+	void Window::draw(sf::RenderWindow * window)
 	{
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
-		Manager::getManager().getScreen()->drawText(sf::Vector2f(pos.x+3, pos.y-3), name, 15, sf::Color(255,255,255));
+		drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
+		drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
+		drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
+		if(name != "")
+			drawText(window, sf::Vector2f(pos.x+3, pos.y-3), name, 15, sf::Color(255,255,255));
 		
 		for(size_t i = 0; i < elements.size(); i++)
 		{
-			elements[i]->draw();
+			elements[i]->draw(window);
 		}
 	}
 	
-	Element::Element(sf::Vector2f pos, sf::Vector2f size) : pos(pos), size(size)
+	void Window::onResize(sf::Vector2f new_size)
 	{
+		//Console::getConsole().log("amount: %lu\n", elements.size());
+		//Console::getConsole().log("%f %f\n", new_size.x, new_size.y);
+		for(size_t i = 0; i < elements.size(); i++)
+		{
+			elements[i]->size.x = new_size.x;///elements.size();
+			elements[i]->size.y = new_size.y/3;///elements.size();
+			//Console::getConsole().log("%f %f\n", elements[i]->size.x, elements[i]->size.y);
+		}
 		
-	}
-	Element::~Element()
-	{
-		
+		size = new_size;
 	}
 
 	Label::Label(sf::Vector2f pos, sf::Vector2f size, std::string txt) : Element(pos, size), txt(txt)
@@ -90,9 +105,9 @@ namespace UI
 		
 	}
 	
-	void Label::draw()
+	void Label::draw(sf::RenderWindow * window)
 	{
-		Manager::getManager().getScreen()->drawText(sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
+		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
 	}
 	
 	EditBox::EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt) : Element(pos, size), txt(txt)
@@ -100,12 +115,12 @@ namespace UI
 		
 	}
 	
-	void EditBox::draw()
+	void EditBox::draw(sf::RenderWindow * window)
 	{
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
-		Manager::getManager().getScreen()->drawText(sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
+		drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
+		drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
+		drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
+		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
 	}
 	
 	CheckBox::CheckBox(sf::Vector2f pos, sf::Vector2f size, bool state) : Element(pos, size), state(state)
@@ -113,13 +128,13 @@ namespace UI
 		
 	}
 			
-	void CheckBox::draw()
+	void CheckBox::draw(sf::RenderWindow * window)
 	{
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
-		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
+		drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
+		drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
+		drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
 		if(state == true)
-			Manager::getManager().getScreen()->drawText(sf::Vector2f(pos.x+3, pos.y-3), "X", size.y, sf::Color(255,255,255));
+			drawText(window, sf::Vector2f(pos.x+3, pos.y-3), "X", size.y, sf::Color(255,255,255));
 	}
 	
 	Button::Button(sf::Vector2f pos, sf::Vector2f size, std::string txt) : Element(pos, size), txt(txt), state(false)
@@ -127,20 +142,20 @@ namespace UI
 		
 	}
 			
-	void Button::draw()
+	void Button::draw(sf::RenderWindow * window)
 	{
 		if(state == false)
 		{
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
+			drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
+			drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
+			drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
 		}
 		else
 		{
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(0,0,0));
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(192,192,192));
-			Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x, size.y), sf::Color(0,0,0), sf::Color(192,192,192));
+			drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(0,0,0));
+			drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(192,192,192));
+			drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(0,0,0), sf::Color(192,192,192));
 		}
-		Manager::getManager().getScreen()->drawText(sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
+		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
 	}
 }

@@ -16,9 +16,13 @@
 
 #include "Config.hpp"
 
-class GameMatrix {
+#include "PlayerState.hpp"
+#include "UI.hpp"
+
+class GameMatrix : public UI::Window
+{
 private:
-	unsigned int width, height;
+	unsigned int m_width, m_height;
 	unsigned char * matrix;
 	unsigned char * new_matrix;
 
@@ -26,8 +30,16 @@ private:
 	time_t refTime;
 	
 	inline void runIteration();
+	
+	//to draw
+	unsigned int TILE_SIZE;
+	unsigned int begin_x, begin_y, end_x, end_y;
+	sf::VertexArray * m_vertices;
+	unsigned int e_X, e_Y;
+	
+	float player_x, player_y;
 public:
-	GameMatrix(unsigned int width, unsigned int height);
+	GameMatrix(sf::Vector2f pos, sf::Vector2f size, unsigned int width, unsigned int height);
 	virtual ~GameMatrix();
 	
 	unsigned int getWidth();
@@ -42,6 +54,15 @@ public:
 	
 	void setMatrix(unsigned char * other, unsigned int width, unsigned int height, unsigned int iteration, time_t ref_iteration);
 	void compute();
+	
+	void draw(sf::RenderWindow * window);
+	void onEvent(sf::Event event);
+	void onResize(sf::Vector2f new_size);
+	
+	
+	void updatePlayerPos(PlayerState * ps);
+	void prepareToMatrix(PlayerState * ps);
+	void drawMatrix(sf::RenderWindow * window);
 };
 
 #endif

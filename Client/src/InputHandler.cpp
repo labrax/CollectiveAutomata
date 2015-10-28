@@ -89,7 +89,7 @@ void InputHandler::poolEvents(Screen * screen)
 			}
 			else if(event.key.code == sf::Keyboard::BackSlash || event.key.code == sf::Keyboard::Q)
 			{
-				ps->getPlayerConsole().visible = (!ps->getPlayerConsole().visible);
+				ps->getPlayerConsole().isVisible = (!ps->getPlayerConsole().isVisible);
 			}
 		}
 		else if (event.type == sf::Event::MouseWheelMoved)

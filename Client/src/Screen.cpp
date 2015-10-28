@@ -7,7 +7,7 @@
 
 #include "Screen.hpp"
 
-Screen::Screen()
+Screen::Screen(UI::Element * drawable) : drawable(drawable)
 {
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 
@@ -19,9 +19,6 @@ Screen::Screen()
 	window->setPosition(sf::Vector2i((desktop.width - width)/2, (desktop.height - height)/2)); //center screen
 	window->setKeyRepeatEnabled(false);
 
-	m_vertices = new sf::VertexArray();
-	m_vertices->setPrimitiveType(sf::Quads);
-
 	paused = false;
 	
 	if(!gamefont.loadFromFile("04B_03__.TTF"))
@@ -29,12 +26,13 @@ Screen::Screen()
 		Console::getConsole().log("Erro carregando fonte! Arquivo: \"%s\"\n", "04B_03__.TTF");
 		assert(false);
 	}
+	
+	//UI::Manager::getManager().setWindow(window);
 }
 
 Screen::~Screen()
 {
 	window->close();
-	delete(m_vertices);
 	delete(window);
 }
 sf::RenderWindow *  Screen::getWindow()
@@ -64,38 +62,22 @@ void Screen::resumeDraw()
 
 void Screen::draw(GameMatrix * gm, PlayerState * ps)
 {
+	window->clear();
 	//if(paused == true)
 	//	return;
-	
-	window->clear();
-	
 	switch(ps->getState())
 	{
 		case STATE_PLAYING:
 		{
-			if(ps->isMoved())
-			{
-				updateViewCenter(ps->getPosX(), ps->getPosY());
-				prepareToMatrix(gm, ps);
-			}
-			drawMatrix(gm, ps);
-			//drawText(sf::Vector2f(ps->getPosX(), ps->getPosY()), "Hello World!", 25, sf::Color::Red);
-
-			char iteration[16];
-			sprintf(iteration, "Iteration: %u", gm->getIteration());
-			drawText(sf::Vector2f(ps->getPosX() + width, ps->getPosY()), std::string(iteration), 25, sf::Color::Blue, ALIGN_RIGHT);
-
-			if(ps->getPlayerConsole().visible == true)
-			{
-				drawRect(sf::Vector2f(ps->getPosX(), ps->getPosY()), sf::Vector2f(width, height/4), config::color_inside, config::color_border);
-			}
+			gm->draw(window);
+			
+			ps->getPlayerConsole().draw(window);
 
 			break;
 		}
 		case STATE_LOGO:
 		{
-			updateViewCenter(0, 0);
-			drawText(sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
+			drawText(window, sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
 			break;
 		}
 		/*case STATE_MENU:
@@ -127,8 +109,7 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 		}*/
 		case STATE_END:
 		{
-			updateViewCenter(0, 0);
-			drawText(sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);
+			drawText(window, sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);
 			break;
 		}
 		default:
@@ -136,96 +117,7 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 			break;
 		}
 	}
-	
 	window->display();
-}
-
-void Screen::prepareToMatrix(GameMatrix * gm, PlayerState * ps)
-{
-	TILE_SIZE = ps->getTileZoom(); //pegar do jogador
-	
-	//will only draw where is visible!
-	begin_x = moved_x/(TILE_SIZE+1);
-	if(begin_x < 0 || begin_x > width)
-		begin_x = 0;
-	end_x = (width+moved_x)/(TILE_SIZE+1)+1;
-	if(end_x >= gm->getWidth())
-		end_x = gm->getWidth()-1;
-
-	begin_y = moved_y/(TILE_SIZE+1);
-	if(begin_y < 0 || begin_y > height)
-		begin_y = 0;
-	end_y = (height+moved_y)/(TILE_SIZE+1)+1;
-	if(end_y >= gm->getHeight())
-		end_y = gm->getHeight()-1;
-}
-
-void Screen::drawMatrix(GameMatrix * gm, PlayerState * ps)
-{
-	m_vertices->clear();
-	if((end_x - begin_x + 1 >= gm->getWidth()) || (end_y - begin_y + 1 >= gm->getHeight()))
-		m_vertices->resize(4);
-	else
-		m_vertices->resize((end_x - begin_x + 1) * (end_y - begin_y + 1) * 4 * 2 + 4);
-	
-	unsigned int e_X = (moved_x+ps->getMouseX())/(TILE_SIZE+1);
-	unsigned int e_Y = (moved_y+ps->getMouseY())/(TILE_SIZE+1);
-	
-	//draw area
-	sf::Color color = sf::Color(180, 180, 180);
-	m_vertices->append(sf::Vertex ( sf::Vector2f ((float)(TILE_SIZE+1)*begin_x-5*(TILE_SIZE+2), (float) (TILE_SIZE+1)*begin_y-5*(TILE_SIZE+2)), color) );
-	m_vertices->append(sf::Vertex ( sf::Vector2f ((float)(TILE_SIZE+1)*end_x+TILE_SIZE+5*TILE_SIZE, (float) (TILE_SIZE+1)*begin_y-5*(TILE_SIZE+2)), color) );
-	m_vertices->append(sf::Vertex ( sf::Vector2f ((float)(TILE_SIZE+1)*end_x+TILE_SIZE+5*TILE_SIZE, (float) (TILE_SIZE+1)*end_y+TILE_SIZE+5*TILE_SIZE), color) );
-	m_vertices->append(sf::Vertex ( sf::Vector2f ((float)(TILE_SIZE+1)*begin_x-5*(TILE_SIZE+2), (float) (TILE_SIZE+1)*end_y+TILE_SIZE+5*TILE_SIZE), color) );
-
-	//draw the matrix elements
-	for(unsigned int i = begin_y; i < end_y; i++)
-	{
-		for(unsigned int j = begin_x; j < end_x; j++)
-		{
-			sf::Color color;
-
-			switch(gm->getElem(j, i))
-			{
-			case 0:
-				color = sf::Color::White;
-				break;
-			case 1:
-				color = sf::Color::Red;
-				break;
-			case 2:
-				color = sf::Color::Green;
-				break;
-			default:
-				color = sf::Color::Blue;
-				break;
-			}
-			
-			if(e_X == j && e_Y == i)
-				color = sf::Color::Yellow;
-
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((float) (TILE_SIZE+1)*j - 1, (float) (TILE_SIZE+1)*i - 1), sf::Color::Black) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j+TILE_SIZE+1, (float) (TILE_SIZE+1)*i - 1), sf::Color::Black) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j+TILE_SIZE+1, (TILE_SIZE+1)*i+TILE_SIZE+1), sf::Color::Black) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((float) (TILE_SIZE+1)*j - 1, (TILE_SIZE+1)*i+TILE_SIZE+1), sf::Color::Black) );
-
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j, (TILE_SIZE+1)*i), color) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j+TILE_SIZE, (TILE_SIZE+1)*i), color) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j+TILE_SIZE, (TILE_SIZE+1)*i+TILE_SIZE), color) );
-			m_vertices->append(sf::Vertex ( sf::Vector2f ((TILE_SIZE+1)*j, (TILE_SIZE+1)*i+TILE_SIZE), color) );
-		}
-	}
-	window->draw(*m_vertices);
-}
-
-void Screen::updateViewCenter(float dx, float dy)
-{
-	moved_x = (int) dx;
-	moved_y = (int) dy;
-	
-	sf::View view = window->getView();
-	view.setCenter((float) width/2 + dx, (float) height/2 + dy);
-	window->setView(view);
 }
 
 void Screen::updateScreenSize(unsigned int width, unsigned int height)
@@ -240,49 +132,7 @@ void Screen::updateScreenSize(unsigned int width, unsigned int height)
 	sf::View new_view = sf::View(sf::Vector2f( (desktop.width-width)/2, (desktop.height - height/2)/2 ), sf::Vector2f(width, height));
 	new_view.setCenter((float) width/2, (float) height/2);
 	window->setView( new_view );
-}
-
-void Screen::drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, enum ALIGNMENT align)
-{
-	sf::Text text;
-
-	text.setFont(gamefont);
-	text.setString(str);
-	text.setPosition(pos);
-	text.setCharacterSize(size);
-	text.setColor(color);
 	
-	if(align == ALIGN_CENTER)
-	{
-		pos.x += (text.getLocalBounds().left - text.getLocalBounds().width)/2;
-		pos.y += (text.getLocalBounds().top - text.getLocalBounds().height)/2 - size;
-		text.setPosition(pos);
-	}
-	else if(align == ALIGN_RIGHT)
-	{
-		pos.x = text.getLocalBounds().left - text.getLocalBounds().width + pos.x;
-		pos.y = text.getLocalBounds().top - text.getLocalBounds().height + pos.y;
-		text.setPosition(pos);
-	}
-	window->draw(text);
-}
-
-void Screen::drawRect(sf::Vector2f pos, sf::Vector2f size, sf::Color inside_color, sf::Color border_color)
-{
-	sf::VertexArray vertices = sf::VertexArray();
-	vertices.setPrimitiveType(sf::Quads);
-	vertices.resize(8);
-	
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x-1, pos.y), border_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x + size.x, pos.y), border_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x + size.x, pos.y + size.y), border_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x-1, pos.y + size.y), border_color) );
-	
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x+1, pos.y+1), inside_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x + size.x-1, pos.y+1), inside_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x + size.x-1, pos.y + size.y-1), inside_color) );
-	vertices.append(sf::Vertex ( sf::Vector2f (pos.x+1, pos.y + size.y-1), inside_color) );
-	
-	window->draw(vertices);
+	drawable->onResize(sf::Vector2f(width, height));
 }
 
