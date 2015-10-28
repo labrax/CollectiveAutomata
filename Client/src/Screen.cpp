@@ -78,14 +78,7 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 		case STATE_LOGO:
 		{
 			drawText(window, sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
-			break;
-		}
-		/*case STATE_MENU:
-		{
-			updateViewCenter(0, 0);
-			
-			
-			UI::Manager::getManager().setScreen(this);
+			/*
 			UI::Window window(sf::Vector2f(width/2 - 500/2, height/2 - 400/2), sf::Vector2f(500, 400), "Menu");
 			
 			UI::Element * element = new UI::Label(sf::Vector2f(window.pos.x+50, window.pos.y+50), sf::Vector2f(DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT), "Player name:");
@@ -101,12 +94,10 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 			element= new UI::Button(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_BUTTON_SIZE_X, DEFAULT_BUTTON_SIZE_Y), "Click");
 			((UI::Button *) element)->state = true;
 			window.addElement(element, true, false);
-			window.draw();
-			
-			drawText(sf::Vector2f(width/2, height/2), "Menu", 50, sf::Color(255,0,0,128), true);
-			
+			window.draw(this->window);
+			*/
 			break;
-		}*/
+		}
 		case STATE_END:
 		{
 			drawText(window, sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);

@@ -74,6 +74,8 @@ namespace UI
 			
 			void draw(sf::RenderWindow * window);
 			
+			
+			void onEvent(sf::Event event);
 			void onResize(sf::Vector2f new_size);
 	};
 	
@@ -84,6 +86,9 @@ namespace UI
 			Label(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
+			
+			void onEvent(sf::Event event);
+			void onResize(sf::Vector2f new_size);
 	};
 	
 	class EditBox : public Element
@@ -93,6 +98,9 @@ namespace UI
 			EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
+			
+			void onEvent(sf::Event event);
+			void onResize(sf::Vector2f new_size);
 	};
 	
 	class CheckBox : public Element
@@ -102,6 +110,9 @@ namespace UI
 			CheckBox(sf::Vector2f pos, sf::Vector2f size, bool state);
 			
 			void draw(sf::RenderWindow * window);
+			
+			void onEvent(sf::Event event);
+			void onResize(sf::Vector2f new_size);
 	};
 	
 	class Button : public Element
@@ -112,6 +123,9 @@ namespace UI
 			Button(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
+			
+			void onEvent(sf::Event event);
+			void onResize(sf::Vector2f new_size);
 	};
 	
 };
