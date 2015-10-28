@@ -20,6 +20,13 @@
 #include "Config.hpp"
 #include "Console.hpp"
 
+enum ALIGNMENT
+{
+	ALIGN_LEFT,
+	ALIGN_CENTER,
+	ALIGN_RIGHT
+};
+
 class Screen {
 private:
 	//window variables
@@ -55,9 +62,18 @@ public:
 	void updateViewCenter(float dx, float dy);
 	void updateScreenSize(unsigned int width, unsigned int height);
 	
-	void drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, bool center = false);
+	void drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, enum ALIGNMENT = ALIGN_LEFT);
 	void drawRect(sf::Vector2f pos, sf::Vector2f size, sf::Color inside_color, sf::Color border_color);
 };
+
+/*//TODO: remove
+class Drawable
+{
+private:
+	static Screen * screen;
+public:
+	void draw();
+};*/
 
 #include "UI.hpp"
 

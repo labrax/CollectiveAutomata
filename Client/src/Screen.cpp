@@ -79,45 +79,56 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 				prepareToMatrix(gm, ps);
 			}
 			drawMatrix(gm, ps);
-			drawText(sf::Vector2f(ps->getPosX(), ps->getPosY()), "Hello World!", 25, sf::Color::Red);
+			//drawText(sf::Vector2f(ps->getPosX(), ps->getPosY()), "Hello World!", 25, sf::Color::Red);
+
+			char iteration[16];
+			sprintf(iteration, "Iteration: %u", gm->getIteration());
+			drawText(sf::Vector2f(ps->getPosX() + width, ps->getPosY()), std::string(iteration), 25, sf::Color::Blue, ALIGN_RIGHT);
+
+			if(ps->getPlayerConsole().visible == true)
+			{
+				drawRect(sf::Vector2f(ps->getPosX(), ps->getPosY()), sf::Vector2f(width, height/4), config::color_inside, config::color_border);
+			}
+
 			break;
 		}
 		case STATE_LOGO:
 		{
 			updateViewCenter(0, 0);
-			//drawText(sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, true);
-			
-			/**TESTING**/
-			UI::Manager::getManager().setScreen(this);
-			UI::Window window(sf::Vector2f(50, 50), sf::Vector2f(500, 400), "UserInformation");
-			UI::Label label1(sf::Vector2f(100, 150), sf::Vector2f(300, 20), "<user>");
-			UI::EditBox editbox1(sf::Vector2f(100, 180), sf::Vector2f(300, 20), "<huehuehue>");
-			UI::CheckBox checkbox1(sf::Vector2f(100, 210), sf::Vector2f(20, 20), true);
-			UI::CheckBox checkbox2(sf::Vector2f(130, 210), sf::Vector2f(20, 20), false);
-			UI::Button button(sf::Vector2f(160, 210), sf::Vector2f(50, 20), "Click");
-			UI::Button button2(sf::Vector2f(220, 210), sf::Vector2f(50, 20), "Click");
-			button2.state = true;
-			window.elements.insert(window.elements.end(), &label1);
-			window.elements.insert(window.elements.end(), &editbox1);
-			window.elements.insert(window.elements.end(), &checkbox1);
-			window.elements.insert(window.elements.end(), &checkbox2);
-			window.elements.insert(window.elements.end(), &button);
-			window.elements.insert(window.elements.end(), &button2);
-			//label1.draw();
-			window.draw();
-			/**TESTING**/
+			drawText(sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
 			break;
 		}
-		case STATE_MENU:
+		/*case STATE_MENU:
 		{
 			updateViewCenter(0, 0);
-			drawText(sf::Vector2f(width/2, height/2), "Menu", 50, sf::Color::Red, true);
+			
+			
+			UI::Manager::getManager().setScreen(this);
+			UI::Window window(sf::Vector2f(width/2 - 500/2, height/2 - 400/2), sf::Vector2f(500, 400), "Menu");
+			
+			UI::Element * element = new UI::Label(sf::Vector2f(window.pos.x+50, window.pos.y+50), sf::Vector2f(DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT), "Player name:");
+			window.addElement(element, false, false);
+			element = new UI::EditBox(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT), "");
+			window.addElement(element, false, true);
+			element = new UI::CheckBox(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_CHECKBOX_SIZE, DEFAULT_CHECKBOX_SIZE), true);
+			window.addElement(element, false, true);
+			element = new UI::CheckBox(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_CHECKBOX_SIZE, DEFAULT_CHECKBOX_SIZE), false);
+			window.addElement(element, true, false);
+			element = new UI::Button(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_BUTTON_SIZE_X, DEFAULT_BUTTON_SIZE_Y), "Go!");
+			window.addElement(element, true, false);
+			element= new UI::Button(sf::Vector2f(0, 0), sf::Vector2f(DEFAULT_BUTTON_SIZE_X, DEFAULT_BUTTON_SIZE_Y), "Click");
+			((UI::Button *) element)->state = true;
+			window.addElement(element, true, false);
+			window.draw();
+			
+			drawText(sf::Vector2f(width/2, height/2), "Menu", 50, sf::Color(255,0,0,128), true);
+			
 			break;
-		}
+		}*/
 		case STATE_END:
 		{
 			updateViewCenter(0, 0);
-			drawText(sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, true);
+			drawText(sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);
 			break;
 		}
 		default:
@@ -231,27 +242,28 @@ void Screen::updateScreenSize(unsigned int width, unsigned int height)
 	window->setView( new_view );
 }
 
-void Screen::drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, bool center)
+void Screen::drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, enum ALIGNMENT align)
 {
 	sf::Text text;
 
 	text.setFont(gamefont);
-
 	text.setString(str);
-	
 	text.setPosition(pos);
-
 	text.setCharacterSize(size);
-
 	text.setColor(color);
 	
-	if(center == true)
+	if(align == ALIGN_CENTER)
 	{
 		pos.x += (text.getLocalBounds().left - text.getLocalBounds().width)/2;
 		pos.y += (text.getLocalBounds().top - text.getLocalBounds().height)/2 - size;
 		text.setPosition(pos);
 	}
-	
+	else if(align == ALIGN_RIGHT)
+	{
+		pos.x = text.getLocalBounds().left - text.getLocalBounds().width + pos.x;
+		pos.y = text.getLocalBounds().top - text.getLocalBounds().height + pos.y;
+		text.setPosition(pos);
+	}
 	window->draw(text);
 }
 

@@ -40,6 +40,29 @@ namespace UI
 		
 	}
 	
+	void Window::addElement(Element * element, bool horizontal_spacing, bool vertical_spacing)
+	{
+		Console::getConsole().log("Window has %lu elements!\n", elements.size());
+		
+		if(elements.size() == 0)
+		{
+			elements.insert(elements.end(), element);
+		}
+		else
+		{
+			if(horizontal_spacing == true)
+				element->pos.x = elements[elements.size()-1]->pos.x + elements[elements.size()-1]->size.x + 10;
+			else
+				element->pos.x = elements[elements.size()-1]->pos.x;
+				
+			if(vertical_spacing == true)
+				element->pos.y = elements[elements.size()-1]->pos.y + elements[elements.size()-1]->size.y + 10;
+			else
+				element->pos.y = elements[elements.size()-1]->pos.y;
+		}
+		elements.insert(elements.end(), element);
+	}
+	
 	void Window::draw()
 	{
 		Manager::getManager().getScreen()->drawRect(pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
@@ -49,10 +72,6 @@ namespace UI
 		
 		for(size_t i = 0; i < elements.size(); i++)
 		{
-			if(elements[i]->pos.x + elements[i]->size.x > this->pos.x + this->size.x)
-			{
-				elements[i]->size.x = this->size.x + this->pos.x - elements[i]->pos.x;
-			}
 			elements[i]->draw();
 		}
 	}

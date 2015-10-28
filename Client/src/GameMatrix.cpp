@@ -35,6 +35,11 @@ unsigned char * & GameMatrix::getMatrix()
 	return matrix;
 }
 
+unsigned int GameMatrix::getIteration()
+{
+	return iteration;
+}
+
 inline unsigned char & GameMatrix::getElem(unsigned int x, unsigned int y)
 {
 	if(x >= 0 && x < width && y >= 0 && y < height)
@@ -46,7 +51,7 @@ inline unsigned char & GameMatrix::getElem(unsigned int x, unsigned int y)
 
 void GameMatrix::randomFill()
 {
-	srand(0);
+	srand(1337);
 	for(unsigned int i = 0; i < height; i++)
 	{
 		for(unsigned int j = 0; j < width; j++)

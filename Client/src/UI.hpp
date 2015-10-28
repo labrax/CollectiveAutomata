@@ -15,6 +15,14 @@
 #include <vector>
 
 #include "Screen.hpp"
+#include "Console.hpp"
+
+#define DEFAULT_MIN_DISTANCE 30
+#define DEFAULT_CHECKBOX_SIZE 20
+#define DEFAULT_BUTTON_SIZE_X 50
+#define DEFAULT_BUTTON_SIZE_Y 20
+#define DEFAULT_LABEL_WIDTH 300
+#define DEFAULT_LABEL_HEIGHT 20
 
 namespace UI
 {
@@ -49,6 +57,8 @@ namespace UI
 			std::vector<Element *> elements;
 			Window(sf::Vector2f pos, sf::Vector2f size, std::string name);
 			virtual ~Window();
+			
+			void addElement(Element *, bool horizontal_spacing, bool vertical_spacing);
 			
 			void draw();
 	};

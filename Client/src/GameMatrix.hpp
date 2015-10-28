@@ -33,6 +33,8 @@ public:
 	unsigned int getWidth();
 	unsigned int getHeight();
 	unsigned char * & getMatrix();
+	
+	unsigned int getIteration();
 
 	unsigned char & getElem(unsigned int x, unsigned int y);
 	

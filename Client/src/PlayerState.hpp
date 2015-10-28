@@ -10,13 +10,26 @@
 
 #include "Config.hpp"
 #include "Console.hpp"
+#include <string>
+
+#include <vector>
+#include <string>
 
 enum GameState
 {
 	STATE_LOGO,
-	STATE_MENU,
+	//STATE_MENU,
 	STATE_PLAYING,
 	STATE_END
+};
+
+class PlayerConsole
+{
+public:
+	std::vector<std::string> str;
+	bool visible;
+	PlayerConsole();
+	~PlayerConsole();
 };
 
 class PlayerState {
@@ -28,6 +41,7 @@ private:
 	bool exit, moved, center;
 	
 	enum GameState state;
+	PlayerConsole player_console;
 public:
 	PlayerState();
 	virtual ~PlayerState();
@@ -53,6 +67,8 @@ public:
 	
 	enum GameState getState();
 	void setState(enum GameState state);
+	
+	PlayerConsole & getPlayerConsole();
 };
 
-#endif /* SRC_CLIENT_GAMESTATE_PLAYERSTATE_H_ */
+#endif

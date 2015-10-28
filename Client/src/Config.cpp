@@ -20,4 +20,9 @@ namespace config
 
 	//screen
 	unsigned int frameratelimit = 50, screen_height = 600, screen_width = 800;
+	
+	//player console
+	sf::Color color_inside(32, 32, 32, 128);
+	sf::Color color_border(192, 192, 192, 128);
+	sf::Color color_text(32, 32, 200);
 }

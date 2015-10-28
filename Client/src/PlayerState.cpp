@@ -9,7 +9,7 @@
 
 PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(-100), mouse_y(-100), exit(false), moved(true), center(false), state(STATE_LOGO)
 {
-	
+	player_console = PlayerConsole();
 }
 
 PlayerState::~PlayerState()
@@ -107,4 +107,20 @@ enum GameState PlayerState::getState()
 void PlayerState::setState(enum GameState state)
 {
 	this->state = state;
+}
+
+PlayerConsole & PlayerState::getPlayerConsole()
+{
+	return player_console;
+}
+
+
+PlayerConsole::PlayerConsole() : visible(false)
+{
+	
+}
+
+PlayerConsole::~PlayerConsole()
+{
+	
 }

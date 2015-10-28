@@ -45,15 +45,15 @@ void InputHandler::poolEvents(Screen * screen)
 		    screen->resumeDraw();
 		else if (event.type == sf::Event::KeyPressed)
 		{
-		    if (event.key.code == sf::Keyboard::Escape)
+		    /*if (event.key.code == sf::Keyboard::Escape)
 		    {
-		    	/*
-		        std::cout << "the escape key was pressed" << std::endl;
-		        std::cout << "control:" << event.key.control << std::endl;
-		        std::cout << "alt:" << event.key.alt << std::endl;
-		        std::cout << "shift:" << event.key.shift << std::endl;
-		        std::cout << "system:" << event.key.system << std::endl;
-		        */
+		    	
+		        //std::cout << "the escape key was pressed" << std::endl;
+		        //std::cout << "control:" << event.key.control << std::endl;
+		        //std::cout << "alt:" << event.key.alt << std::endl;
+		        //std::cout << "shift:" << event.key.shift << std::endl;
+		        //std::cout << "system:" << event.key.system << std::endl;
+		        
 		        switch(ps->getState())
 				{
 					case STATE_END:
@@ -68,7 +68,7 @@ void InputHandler::poolEvents(Screen * screen)
 					}
 				}
 		    }
-		    else if(event.key.code == sf::Keyboard::Space)
+		    else*/ if(event.key.code == sf::Keyboard::Space)
 		    {
 				ps->setCenter();
 			}
@@ -78,11 +78,6 @@ void InputHandler::poolEvents(Screen * screen)
 				{
 					case STATE_LOGO:
 					{
-						ps->setState(STATE_MENU);
-						break;
-					}
-					case STATE_MENU:
-					{
 						ps->setState(STATE_PLAYING);
 						break;
 					}
@@ -91,6 +86,10 @@ void InputHandler::poolEvents(Screen * screen)
 						break;
 					}
 				}
+			}
+			else if(event.key.code == sf::Keyboard::BackSlash || event.key.code == sf::Keyboard::Q)
+			{
+				ps->getPlayerConsole().visible = (!ps->getPlayerConsole().visible);
 			}
 		}
 		else if (event.type == sf::Event::MouseWheelMoved)

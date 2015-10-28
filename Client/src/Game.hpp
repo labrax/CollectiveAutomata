@@ -16,7 +16,8 @@
 #include "Screen.hpp"
 #include "PlayerState.hpp"
 
-class Game {
+class Game
+{
 private:
 	GameMatrix * gm;
 	Screen * screen;
@@ -29,4 +30,4 @@ public:
 	void run();
 };
 
-#endif /* SRC_CLIENT_GAME_H_ */
+#endif
