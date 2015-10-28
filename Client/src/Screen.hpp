@@ -8,10 +8,10 @@
 #ifndef SRC_CLIENT_GRAPHICS_SCREEN_H_
 #define SRC_CLIENT_GRAPHICS_SCREEN_H_
 
-#include <cstdio>
+#include <cassert>
+#include <string>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -22,23 +22,43 @@
 
 class Screen {
 private:
+	//window variables
 	sf::RenderWindow * window;
-	sf::VertexArray * m_vertices;
 	unsigned int width, height;
+	
+	//matrix renderer
+	sf::VertexArray * m_vertices;
 	int moved_x, moved_y;
+	
+	unsigned int TILE_SIZE;
+	unsigned int begin_x, begin_y, end_x, end_y;
+	
+	//pause rendering
 	bool paused;
+	
+	sf::Font gamefont;
 public:
 	Screen();
 	virtual ~Screen();
-	void prepareScreen(GameMatrix * gm, PlayerState * ps);
-	void drawObjects(GameMatrix * gm, PlayerState * ps);
-	void updateViewCenter(float dx, float dy);
-	void updateScreenSize(unsigned int width, unsigned int height, int dx, int dy);
+	
 	sf::RenderWindow * getWindow();
-	void stopDraw();
-	void resumeDraw();
 	unsigned int getWidth();
 	unsigned int getHeight();
+	
+	void stopDraw();
+	void resumeDraw();
+	
+	void draw(GameMatrix * gm, PlayerState * ps);
+	void prepareToMatrix(GameMatrix * gm, PlayerState * ps);
+	void drawMatrix(GameMatrix * gm, PlayerState * ps);
+	
+	void updateViewCenter(float dx, float dy);
+	void updateScreenSize(unsigned int width, unsigned int height);
+	
+	void drawText(sf::Vector2f pos, std::string str, size_t size, sf::Color color, bool center = false);
+	void drawRect(sf::Vector2f pos, sf::Vector2f size, sf::Color inside_color, sf::Color border_color);
 };
+
+#include "UI.hpp"
 
 #endif /* SRC_CLIENT_GRAPHICS_SCREEN_H_ */

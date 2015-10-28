@@ -13,7 +13,7 @@ namespace config
 	sf::Time time_per_frame = sf::seconds(1.0f/frameratelimit);
 
 	//gamestate
-	unsigned int height = 450, width = 800, iterations_per_sec = 1;
+	unsigned int height = 30, width = 40, iterations_per_sec = 1;
 
 	//player
 	unsigned int initial_zoom = 10;

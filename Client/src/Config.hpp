@@ -1,5 +1,5 @@
 /*
- * Config.h
+ * Config.hpp
  *
  *  Created on: 15 de set de 2015
  *      Author: Victor R. Cardoso
@@ -21,4 +21,4 @@ namespace config {
 	extern unsigned int frameratelimit, screen_height, screen_width;
 }
 
-#endif /* COMMON_CONFIG_H_ */
+#endif

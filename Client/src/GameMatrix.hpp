@@ -29,11 +29,15 @@ private:
 public:
 	GameMatrix(unsigned int width, unsigned int height);
 	virtual ~GameMatrix();
+	
 	unsigned int getWidth();
 	unsigned int getHeight();
 	unsigned char * & getMatrix();
+
 	unsigned char & getElem(unsigned int x, unsigned int y);
+	
 	void randomFill();
+	
 	void setMatrix(unsigned char * other, unsigned int width, unsigned int height, unsigned int iteration, time_t ref_iteration);
 	void compute();
 };

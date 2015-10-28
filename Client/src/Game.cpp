@@ -12,6 +12,7 @@ Game::Game() {
 	gm->randomFill();
 	screen = new Screen();
 	ps = new PlayerState();
+	ps->setCenter();
 	ih = new InputHandler(ps);
 	//net = new Network();
 }
@@ -26,7 +27,6 @@ Game::~Game() {
 
 void Game::run() {
 	bool isRunning = true;
-	screen->prepareScreen(gm, ps);
 
 	sf::Clock clock;
 	while(isRunning) {
@@ -35,12 +35,14 @@ void Game::run() {
 		gm->compute();
 		//input
 		ih->poolEvents(screen);
-		if(ps->isMoved())
-		{
-			screen->updateViewCenter(ps->getPosX(), ps->getPosY());
-		}
 		//screen
-		screen->drawObjects(gm, ps);
+		screen->draw(gm, ps);
+		
+		if(ps->getCenter())
+		{
+			ps->setPos(-((float) screen->getWidth()/2 - gm->getWidth()*(ps->getTileZoom()+1)/2), -((float) screen->getHeight()/2-gm->getHeight()*(ps->getTileZoom()+1)/2));
+		}
+		
 		if(ps->isExit())
 			isRunning = false;
 

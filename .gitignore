@@ -1,3 +1,4 @@
 *.o*
 *.d*
 Client/client
+*vscode*

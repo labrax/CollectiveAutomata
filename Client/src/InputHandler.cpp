@@ -27,7 +27,18 @@ void InputHandler::poolEvents(Screen * screen)
 		if (event.type == sf::Event::Closed)
 			ps->setExit();
 		else if (event.type == sf::Event::Resized)
-			screen->updateScreenSize(event.size.width, event.size.height, ps->getPosX(), ps->getPosY());
+		{
+			float e_dX = ((float) ps->getPosX() + screen->getWidth()/2)/(ps->getTileZoom()+1);
+			float e_dY = ((float) ps->getPosY() + screen->getHeight()/2)/(ps->getTileZoom()+1);
+			
+			screen->updateScreenSize(event.size.width, event.size.height);
+			
+			float new_x = e_dX*(ps->getTileZoom()+1) - screen->getWidth()/2;
+			float new_y = e_dY*(ps->getTileZoom()+1) - screen->getHeight()/2;
+			
+			ps->setPos(new_x, new_y);
+			//ps->setPos(ps->getPosX(), ps->getPosY());
+		}
 		else if (event.type == sf::Event::LostFocus)
 		    screen->stopDraw();
 		else if (event.type == sf::Event::GainedFocus)
@@ -43,7 +54,44 @@ void InputHandler::poolEvents(Screen * screen)
 		        std::cout << "shift:" << event.key.shift << std::endl;
 		        std::cout << "system:" << event.key.system << std::endl;
 		        */
+		        switch(ps->getState())
+				{
+					case STATE_END:
+					{
+						ps->setExit();
+						break;
+					}
+					default:
+					{
+						ps->setState(STATE_END);
+						break;
+					}
+				}
 		    }
+		    else if(event.key.code == sf::Keyboard::Space)
+		    {
+				ps->setCenter();
+			}
+			else if(event.key.code == sf::Keyboard::Return)
+			{
+				switch(ps->getState())
+				{
+					case STATE_LOGO:
+					{
+						ps->setState(STATE_MENU);
+						break;
+					}
+					case STATE_MENU:
+					{
+						ps->setState(STATE_PLAYING);
+						break;
+					}
+					default:
+					{
+						break;
+					}
+				}
+			}
 		}
 		else if (event.type == sf::Event::MouseWheelMoved)
 		{

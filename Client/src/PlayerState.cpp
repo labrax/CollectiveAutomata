@@ -7,7 +7,7 @@
 
 #include "PlayerState.hpp"
 
-PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(-100), mouse_y(-100), exit(false)
+PlayerState::PlayerState() : tileZoom(config::initial_zoom), dx(0), dy(0), mouse_x(-100), mouse_y(-100), exit(false), moved(true), center(false), state(STATE_LOGO)
 {
 	
 }
@@ -19,6 +19,8 @@ PlayerState::~PlayerState()
 
 void PlayerState::setTileZoom(unsigned int zoom)
 {
+	if(tileZoom != zoom)
+		moved = true;
 	tileZoom = zoom;
 }
 
@@ -33,6 +35,7 @@ void PlayerState::setPos(float dx, float dy)
 		moved = true;
 	this->dx = dx;
 	this->dy = dy;
+	//Console::getConsole().log("%f %f\n", dx, dy);
 }
 
 float PlayerState::getPosX()
@@ -79,4 +82,29 @@ long PlayerState::getMouseX()
 long PlayerState::getMouseY()
 {
 	return mouse_y;
+}
+
+void PlayerState::setCenter()
+{
+	center = true;
+}
+
+bool PlayerState::getCenter()
+{
+	if(center == true)
+	{
+		center = false;
+		return true;
+	}
+	return false;
+}
+
+enum GameState PlayerState::getState()
+{
+	return state;
+}
+
+void PlayerState::setState(enum GameState state)
+{
+	this->state = state;
 }
