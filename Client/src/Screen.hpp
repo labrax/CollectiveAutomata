@@ -44,9 +44,10 @@ public:
 	void stopDraw();
 	void resumeDraw();
 	
-	void draw(GameMatrix * gm, PlayerState * ps);
+	void draw(GameMatrix * gm);
 	
-	void updateScreenSize(unsigned int width, unsigned int height);
+	void onEvent(sf::Event & event);
+	void onResize(sf::Vector2f & new_size);
 };
 
 #endif

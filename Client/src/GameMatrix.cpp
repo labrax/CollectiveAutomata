@@ -9,19 +9,34 @@
 
 GameMatrix::GameMatrix(sf::Vector2f pos, sf::Vector2f size, unsigned int width, unsigned int height) : Window(pos, size, ""), m_width(width), m_height(height), iteration(0)
 {
-	matrix = new unsigned char[height*width];
-	new_matrix = new unsigned char[height*width];
+	matrixes[0] = new unsigned char[height*width];
+	matrixes[1] = new unsigned char[height*width];
+	curr_matrix = 0;
 	refTime = time(NULL);
 	
 	m_vertices = new sf::VertexArray();
 	m_vertices->setPrimitiveType(sf::Quads);
+	
+	TILE_SIZE = config::initial_zoom;
+	
+	player_x = 0;
+	player_y = 0;
+	
+	mouse_x = -100;
+	mouse_y = -100;
+	
+	mouse_move = false;
+	
+	popup = new UI::PopUp(pos, size, "");
+	addElement(popup, false, false);
 }
 
 GameMatrix::~GameMatrix()
 {
-	delete(m_vertices);
-	delete matrix;
-	delete new_matrix;
+	m_vertices->clear();
+	delete m_vertices;
+	delete matrixes[0];
+	delete matrixes[1];
 }
 
 unsigned int GameMatrix::getWidth()
@@ -36,7 +51,7 @@ unsigned int GameMatrix::getHeight()
 
 unsigned char * & GameMatrix::getMatrix()
 {
-	return matrix;
+	return matrixes[curr_matrix];
 }
 
 unsigned int GameMatrix::getIteration()
@@ -47,7 +62,7 @@ unsigned int GameMatrix::getIteration()
 inline unsigned char & GameMatrix::getElem(unsigned int x, unsigned int y)
 {
 	if(x >= 0 && x < m_width && y >= 0 && y < m_height)
-		return matrix[y*m_width + x];
+		return matrixes[curr_matrix][y*m_width + x];
 	
 	return (config::uchar_nil);
 }
@@ -60,7 +75,7 @@ void GameMatrix::randomFill()
 		for(unsigned int j = 0; j < m_width; j++)
 		{
 			unsigned char elem = (unsigned char) rand()%2;
-			matrix[i*m_width + j] = elem;
+			matrixes[curr_matrix][i*m_width + j] = elem;
 		}
 	}
 }
@@ -70,12 +85,12 @@ void GameMatrix::setMatrix(unsigned char * other, unsigned int width, unsigned i
 	this->m_width = width;
 	this->m_height = height;
 
-	delete(matrix);
-	matrix = new unsigned char[height*width];
+	delete(matrixes[curr_matrix]);
+	matrixes[curr_matrix] = new unsigned char[height*width];
 
 	for(unsigned int i = 0; i < height*width; i++)
 	{
-		matrix[i] = other[i];
+		matrixes[curr_matrix][i] = other[i];
 	}
 
 	this->iteration = iteration;
@@ -120,26 +135,24 @@ void GameMatrix::runIteration()
 			
 			unsigned char next_element = index_max;
 
-			if(matrix[i*m_width + j] == 0) //se estava morto
+			if(matrixes[curr_matrix][i*m_width + j] == 0) //se estava morto
 			{
 				if(amount_life == 3) //e tem 3, fica vivo do tipo que tem mais:
-					new_matrix[i*m_width + j] = next_element;
+					matrixes[!curr_matrix][i*m_width + j] = next_element;
 				else
-					new_matrix[i*m_width + j] = 0;
+					matrixes[!curr_matrix][i*m_width + j] = 0;
 			}
 			else //se estava vivo
 			{
 				if(amount_life >= 2 && amount_life <= 3) //continua vivo com o que tinha antes
-					new_matrix[i*m_width + j] = matrix[i*m_width + j];
+					matrixes[!curr_matrix][i*m_width + j] = matrixes[curr_matrix][i*m_width + j];
 				else //morre
-					new_matrix[i*m_width + j] = 0;
+					matrixes[!curr_matrix][i*m_width + j] = 0;
 			}
 		}
 	}
 
-	unsigned char * temp = matrix; //replace the old with the new one
-	matrix = new_matrix;
-	new_matrix = temp;
+	curr_matrix = !curr_matrix; //swap matrixes
 }
 
 void GameMatrix::compute()
@@ -157,32 +170,137 @@ void GameMatrix::compute()
 }
 
 void GameMatrix::draw(sf::RenderWindow * window)
-{
+{	
 	Window::draw(window);
 	drawMatrix(window);
+	drawElements(window);
 	
 	char iteration[16];
 	sprintf(iteration, "Iteration: %u", getIteration());
 	drawText(window, sf::Vector2f(size.x, 0), std::string(iteration), 25, sf::Color::Blue, ALIGN_RIGHT);
 }
 
-void GameMatrix::onEvent(sf::Event event)
+bool GameMatrix::onEvent(sf::Event & event)
 {
-	
+	//Console::getConsole().log("player_: %f %f\n", player_x, player_y);
+	//Console::getConsole().log("mouse_: %u %u\n", mouse_x, mouse_y);
+	switch(event.type)
+	{
+		case sf::Event::KeyPressed:
+		{
+			switch(event.key.code)
+			{
+				case sf::Keyboard::Space:
+					player_x = -((float) size.x/2 - m_width*(TILE_SIZE+1)/2);
+					player_y = -((float) size.y/2 - m_height*(TILE_SIZE+1)/2);
+					prepareToMatrix();
+					return true;
+				break;
+				/*case sf::Keyboard::Return: //TODO: mover para outro local
+					if(ps->getState() == STATE_LOGO)
+						ps->setState(STATE_PLAYING);
+					break;*/
+				default:
+					break;
+			}
+			break;
+		}
+		case sf::Event::MouseWheelMoved:
+		{
+			if(event.mouseWheel.delta != 0)
+			{
+				if(TILE_SIZE + event.mouseWheel.delta >= 10 && TILE_SIZE + event.mouseWheel.delta <= 50)
+				{
+					unsigned int new_zoom = TILE_SIZE + event.mouseWheel.delta;
+					unsigned int curr_zoom = TILE_SIZE;
+					
+					float e_dX = ((float) player_x + mouse_x)/(curr_zoom+1);
+					float e_dY = ((float) player_y + mouse_y)/(curr_zoom+1);
+					
+					float new_x = e_dX*(new_zoom+1) - mouse_x;
+					float new_y = e_dY*(new_zoom+1) - mouse_y;
+					
+					TILE_SIZE = new_zoom;
+					player_x = new_x;
+					player_y = new_y;
+					prepareToMatrix();
+				}
+			}
+			return true;
+			break;
+		}
+		case sf::Event::MouseButtonPressed:
+		{
+			if (event.mouseButton.button == sf::Mouse::Right)
+			{
+				mouse_move = true;
+				s_move_mouse_x = player_x + event.mouseButton.x;
+				s_move_mouse_y = player_y + event.mouseButton.y;
+			}
+			return true;
+			break;
+		}
+		case sf::Event::MouseButtonReleased:
+		{
+			if (event.mouseButton.button == sf::Mouse::Right)
+			{
+				mouse_move = false;
+			}
+			return true;
+			break;
+		}
+		case sf::Event::MouseMoved:
+		{
+			if(mouse_move == true)
+			{
+				player_x = s_move_mouse_x - event.mouseMove.x;
+				player_y = s_move_mouse_y - event.mouseMove.y;
+				prepareToMatrix();
+			}
+			mouse_x = event.mouseMove.x;
+			mouse_y = event.mouseMove.y;
+			return true;
+			break;
+		}
+		case sf::Event::Closed:
+		{
+			popup->isVisible = true;
+			break;
+		}
+		//	ps->setExit();
+		default:
+		{
+			break;
+		}
+	}
+	return Window::onEvent(event);
+	//return false;
 }
 
-void GameMatrix::onResize(sf::Vector2f new_size)
+void GameMatrix::onResize(sf::Vector2f & new_size)
 {
-	Window::onResize(new_size);
+	if(size.x == 0 && size.y == 0)
+	{
+		Window::onResize(new_size);
+		
+		player_x = -((float) size.x/2 - m_width*(TILE_SIZE+1)/2);
+		player_y = -((float) size.y/2 - m_height*(TILE_SIZE+1)/2);
+	}
+	else
+	{
+		float e_dX = ((float) player_x + size.x/2)/(TILE_SIZE + 1);
+		float e_dY = ((float) player_y + size.y/2)/(TILE_SIZE + 1);
+			
+		Window::onResize(new_size);	
+			
+		player_x = e_dX*(TILE_SIZE + 1) - size.x/2;
+		player_y = e_dY*(TILE_SIZE + 1) - size.y/2;
+	}
+	prepareToMatrix();
 }
 
-void GameMatrix::prepareToMatrix(PlayerState * ps)
+void GameMatrix::prepareToMatrix()
 {
-	TILE_SIZE = ps->getTileZoom(); //pegar do jogador
-	
-	player_x = ps->getPosX();
-	player_y = ps->getPosY();
-	
 	//will only draw where is visible!
 	begin_x = player_x/(TILE_SIZE+1);
 	if(begin_x < 0 || begin_x > size.x)
@@ -197,19 +315,13 @@ void GameMatrix::prepareToMatrix(PlayerState * ps)
 	end_y = (size.y+player_y)/(TILE_SIZE+1)+1;
 	if(end_y >= m_height)
 		end_y = m_height-1;
-		
-	e_X = (player_x+ps->getMouseX())/(TILE_SIZE+1);
-	e_Y = (player_y+ps->getMouseY())/(TILE_SIZE+1);
-}
-
-void GameMatrix::updatePlayerPos(PlayerState * ps)
-{
-	e_X = (player_x+ps->getMouseX())/(TILE_SIZE+1);
-	e_Y = (player_y+ps->getMouseY())/(TILE_SIZE+1);
 }
 
 void GameMatrix::drawMatrix(sf::RenderWindow * window)
 {
+	unsigned int e_X = (player_x + mouse_x)/(TILE_SIZE+1);
+	unsigned int e_Y = (player_y + mouse_y)/(TILE_SIZE+1);
+	
 	m_vertices->clear();
 	if((end_x - begin_x + 1 >= m_width) || (end_y - begin_y + 1 >= m_height))
 		m_vertices->resize(4);
@@ -261,4 +373,11 @@ void GameMatrix::drawMatrix(sf::RenderWindow * window)
 		}
 	}
 	window->draw(*m_vertices);
+}
+
+bool GameMatrix::exit()
+{
+	if(popup->isVisible && popup->answer)
+		return true;
+	return false;
 }

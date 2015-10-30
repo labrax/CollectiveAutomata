@@ -12,11 +12,10 @@ Game::Game() {
 	gm->randomFill();
 	screen = new Screen(gm);
 	
-	ps = new PlayerState();
-	ps->setCenter();
+	PlayerConsole * pc = new PlayerConsole();
 	
-	gm->addElement(&(ps->getPlayerConsole()), false, false);
-	ih = new InputHandler(ps);
+	gm->addElement(pc, false, false);
+	ih = new InputHandler();
 	//net = new Network();
 }
 
@@ -24,7 +23,7 @@ Game::~Game() {
 	delete(ih);
 	delete(screen);
 	delete(gm);
-	delete(ps);
+	//delete(pc);
 	//delete(net);
 }
 
@@ -39,23 +38,10 @@ void Game::run() {
 		//input
 		ih->poolEvents(screen);
 		
-		/*exchange messages*/
-		if(ps->getCenter())
-		{
-			ps->setPos(-((float) screen->getWidth()/2 - gm->getWidth()*(ps->getTileZoom()+1)/2), -((float) screen->getHeight()/2-gm->getHeight()*(ps->getTileZoom()+1)/2));
-		}
-		
-		if(ps->isMoved())
-		{
-			gm->prepareToMatrix(ps);
-		}
-		gm->updatePlayerPos(ps);
-		/*exchange messages*/
-		
 		//screen
-		screen->draw(gm, ps);
-		
-		if(ps->isExit())
+		screen->draw(gm);
+
+		if(gm->exit())
 			isRunning = false;
 
 		sf::Time elapsedTime = clock.restart();

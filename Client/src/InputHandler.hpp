@@ -19,14 +19,11 @@
 
 class InputHandler {
 private:
-	PlayerState * ps;
-
-	bool mouse_move;
-	float mouse_x, mouse_y;
+	
 public:
-	InputHandler(PlayerState * ps);
+	InputHandler();
 	virtual ~InputHandler();
 	void poolEvents(Screen * screen);
 };
 
-#endif /* SRC_CLIENT_CONTROL_INPUTHANDLER_H_ */
+#endif

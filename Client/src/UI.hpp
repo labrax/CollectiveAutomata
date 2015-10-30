@@ -27,6 +27,17 @@
 
 namespace UI
 {
+	enum ELEMENT_TYPE
+	{
+		DRAWABLE,
+		ELEMENT,
+		WINDOW,
+		LABEL,
+		CHECKBOX,
+		BUTTON,
+		POPUP
+	};
+	
 	class Drawable
 	{
 	public:
@@ -58,8 +69,8 @@ namespace UI
 			Element(sf::Vector2f pos, sf::Vector2f size);
 			virtual ~Element();
 			
-			virtual void onEvent(sf::Event event) = 0;
-			virtual void onResize(sf::Vector2f new_size) = 0;
+			virtual bool onEvent(sf::Event & event) = 0;
+			virtual void onResize(sf::Vector2f & new_size) = 0;
 	};
 	
 	class Window : public Element
@@ -73,10 +84,10 @@ namespace UI
 			void addElement(Element *, bool horizontal_spacing, bool vertical_spacing);
 			
 			void draw(sf::RenderWindow * window);
+			void drawElements(sf::RenderWindow * window);
 			
-			
-			void onEvent(sf::Event event);
-			void onResize(sf::Vector2f new_size);
+			bool onEvent(sf::Event & event);
+			void onResize(sf::Vector2f & new_size);
 	};
 	
 	class Label : public Element
@@ -86,9 +97,6 @@ namespace UI
 			Label(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
-			
-			void onEvent(sf::Event event);
-			void onResize(sf::Vector2f new_size);
 	};
 	
 	class EditBox : public Element
@@ -98,9 +106,6 @@ namespace UI
 			EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
-			
-			void onEvent(sf::Event event);
-			void onResize(sf::Vector2f new_size);
 	};
 	
 	class CheckBox : public Element
@@ -110,9 +115,6 @@ namespace UI
 			CheckBox(sf::Vector2f pos, sf::Vector2f size, bool state);
 			
 			void draw(sf::RenderWindow * window);
-			
-			void onEvent(sf::Event event);
-			void onResize(sf::Vector2f new_size);
 	};
 	
 	class Button : public Element
@@ -123,11 +125,19 @@ namespace UI
 			Button(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
-			
-			void onEvent(sf::Event event);
-			void onResize(sf::Vector2f new_size);
 	};
 	
+	class PopUp : public Window
+	{
+		public:
+			bool answer;
+			
+			PopUp(sf::Vector2f pos, sf::Vector2f size, std::string name);
+			
+			void draw(sf::RenderWindow * window) ;
+			bool onEvent(sf::Event & event);
+			void onResize(sf::Vector2f & new_size);
+	};
 };
 
 #endif

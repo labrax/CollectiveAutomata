@@ -12,7 +12,9 @@ Screen::Screen(UI::Element * drawable) : drawable(drawable)
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 
 	window = new sf::RenderWindow(sf::VideoMode(1, 1), "CollectiveAutomata!");
-	updateScreenSize(config::screen_width, config::screen_height);
+	
+	sf::Vector2f new_size = sf::Vector2f(config::screen_width, config::screen_height);
+	onResize(new_size);
 
 	window->setFramerateLimit(config::frameratelimit);
 	window->setVerticalSyncEnabled(true);
@@ -60,24 +62,18 @@ void Screen::resumeDraw()
 	paused = false;
 }
 
-void Screen::draw(GameMatrix * gm, PlayerState * ps)
+void Screen::draw(GameMatrix * gm)
 {
 	window->clear();
 	//if(paused == true)
 	//	return;
-	switch(ps->getState())
-	{
-		case STATE_PLAYING:
-		{
-			gm->draw(window);
-			
-			ps->getPlayerConsole().draw(window);
-
-			break;
-		}
-		case STATE_LOGO:
-		{
-			drawText(window, sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
+	
+	gm->draw(window);
+		
+	window->display();
+	return;
+	
+	drawText(window, sf::Vector2f(width/2, height/2), "CollectiveAutomata", 50, sf::Color::Blue, ALIGN_CENTER);
 			/*
 			UI::Window window(sf::Vector2f(width/2 - 500/2, height/2 - 400/2), sf::Vector2f(500, 400), "Menu");
 			
@@ -96,25 +92,25 @@ void Screen::draw(GameMatrix * gm, PlayerState * ps)
 			window.addElement(element, true, false);
 			window.draw(this->window);
 			*/
-			break;
-		}
-		case STATE_END:
-		{
-			drawText(window, sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);
-			break;
-		}
-		default:
-		{
-			break;
-		}
-	}
+	drawText(window, sf::Vector2f(width/2, height/2), "gg!", 50, sf::Color::Blue, ALIGN_CENTER);
+
 	window->display();
 }
 
-void Screen::updateScreenSize(unsigned int width, unsigned int height)
+void Screen::onEvent(sf::Event & event)
 {
-	this->width = width;
-	this->height = height;
+	if (event.type == sf::Event::LostFocus)
+		stopDraw();
+	else if (event.type == sf::Event::GainedFocus)
+		resumeDraw();
+	else
+		drawable->onEvent(event);
+}
+
+void Screen::onResize(sf::Vector2f & new_size)
+{
+	this->width = new_size.x;
+	this->height = new_size.y;
 
 	if(window->getSize().x != width && window->getSize().y != height)
 		window->setSize(sf::Vector2<unsigned int>(width, height));
@@ -124,6 +120,6 @@ void Screen::updateScreenSize(unsigned int width, unsigned int height)
 	new_view.setCenter((float) width/2, (float) height/2);
 	window->setView( new_view );
 	
-	drawable->onResize(sf::Vector2f(width, height));
+	sf::Vector2f passed_size = sf::Vector2f(width, height);
+	drawable->onResize(passed_size);
 }
-

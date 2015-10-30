@@ -22,7 +22,6 @@ private:
 	GameMatrix * gm;
 	Screen * screen;
 	InputHandler * ih;
-	PlayerState * ps;
 	//Network * net;
 public:
 	Game();
