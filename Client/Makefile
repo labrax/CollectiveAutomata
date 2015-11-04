@@ -3,8 +3,8 @@ OBJ_DIR := obj
 CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix $(OBJ_DIR)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
-LD_FLAGS := -Wall -g -lsfml-system -lsfml-window -lsfml-graphics -fopenmp
-CC_FLAGS := -Wall -g -fopenmp
+LD_FLAGS := -Wall -g -LSFML-2.3.2x64/lib -lxcb-image -lsfml-system -lsfml-window -lsfml-graphics -fopenmp
+CC_FLAGS := -Wall -g -ISFML-2.3.2x64/include -fopenmp
 
 all: client
 
