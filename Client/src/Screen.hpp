@@ -15,7 +15,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "PlayerState.hpp"
 #include "GameMatrix.hpp"
 #include "Config.hpp"
 #include "Console.hpp"

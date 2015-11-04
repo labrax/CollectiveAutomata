@@ -106,6 +106,8 @@ namespace UI
 			EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt);
 			
 			void draw(sf::RenderWindow * window);
+			
+			bool onEvent(sf::Event & event);
 	};
 	
 	class CheckBox : public Element
@@ -133,8 +135,9 @@ namespace UI
 			bool answer;
 			
 			PopUp(sf::Vector2f pos, sf::Vector2f size, std::string name);
+			~PopUp();
 			
-			void draw(sf::RenderWindow * window) ;
+			void draw(sf::RenderWindow * window);
 			bool onEvent(sf::Event & event);
 			void onResize(sf::Vector2f & new_size);
 	};

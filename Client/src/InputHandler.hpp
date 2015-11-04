@@ -10,7 +10,6 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include "PlayerState.hpp"
 #include "Screen.hpp"
 #include "Console.hpp"
 

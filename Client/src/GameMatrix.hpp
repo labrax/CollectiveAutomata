@@ -16,8 +16,8 @@
 
 #include "Config.hpp"
 
-#include "PlayerState.hpp"
 #include "UI.hpp"
+#include "GameUI.hpp"
 
 class GameMatrix : public UI::Window
 {

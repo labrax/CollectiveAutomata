@@ -27,7 +27,9 @@ GameMatrix::GameMatrix(sf::Vector2f pos, sf::Vector2f size, unsigned int width, 
 	
 	mouse_move = false;
 	
-	popup = new UI::PopUp(pos, size, "");
+	addElement(new BeginPopUp(pos, size, ""), false, false);
+	
+	popup = new ClosePopUp(pos, size, "");
 	addElement(popup, false, false);
 }
 
@@ -173,11 +175,12 @@ void GameMatrix::draw(sf::RenderWindow * window)
 {	
 	Window::draw(window);
 	drawMatrix(window);
-	drawElements(window);
 	
 	char iteration[16];
 	sprintf(iteration, "Iteration: %u", getIteration());
 	drawText(window, sf::Vector2f(size.x, 0), std::string(iteration), 25, sf::Color::Blue, ALIGN_RIGHT);
+	
+	drawElements(window);
 }
 
 bool GameMatrix::onEvent(sf::Event & event)

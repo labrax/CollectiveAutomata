@@ -14,7 +14,6 @@
 #include "InputHandler.hpp"
 #include "GameMatrix.hpp"
 #include "Screen.hpp"
-#include "PlayerState.hpp"
 
 class Game
 {

@@ -138,6 +138,128 @@ namespace UI
 		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
 	}
 	
+	bool EditBox::onEvent(sf::Event & event)
+	{
+		if(event.type == sf::Event::KeyPressed)
+		{
+			switch(event.key.code)
+			{
+				case sf::Keyboard::BackSpace:
+					//TODO: remover um caracter
+					return true;
+					break;
+				case sf::Keyboard::A:
+					txt += 'A';
+					return true;
+					break;
+				case sf::Keyboard::B:
+					txt += 'B';
+					return true;
+					break;
+				case sf::Keyboard::C:
+					txt += 'C';
+					return true;
+					break;
+				case sf::Keyboard::D:
+					txt += 'D';
+					return true;
+					break;
+				case sf::Keyboard::E:
+					txt += 'E';
+					return true;
+					break;
+				case sf::Keyboard::F:
+					txt += 'F';
+					return true;
+					break;
+				case sf::Keyboard::G:
+					txt += 'G';
+					return true;
+					break;
+				case sf::Keyboard::H:
+					txt += 'H';
+					return true;
+					break;
+				case sf::Keyboard::I:
+					txt += 'I';
+					return true;
+					break;
+				case sf::Keyboard::J:
+					txt += 'J';
+					return true;
+					break;
+				case sf::Keyboard::K:
+					txt += 'K';
+					return true;
+					break;
+				case sf::Keyboard::L:
+					txt += 'L';
+					return true;
+					break;
+				case sf::Keyboard::M:
+					txt += 'M';
+					return true;
+					break;
+				case sf::Keyboard::N:
+					txt += 'N';
+					return true;
+					break;
+				case sf::Keyboard::O:
+					txt += 'O';
+					return true;
+					break;
+				case sf::Keyboard::P:
+					txt += 'P';
+					return true;
+					break;
+				case sf::Keyboard::Q:
+					txt += 'Q';
+					return true;
+					break;
+				case sf::Keyboard::R:
+					txt += 'R';
+					return true;
+					break;
+				case sf::Keyboard::S:
+					txt += 'S';
+					return true;
+					break;
+				case sf::Keyboard::T:
+					txt += 'T';
+					return true;
+					break;
+				case sf::Keyboard::U:
+					txt += 'U';
+					return true;
+					break;
+				case sf::Keyboard::V:
+					txt += 'V';
+					return true;
+					break;
+				case sf::Keyboard::W:
+					txt += 'W';
+					return true;
+					break;
+				case sf::Keyboard::X:
+					txt += 'X';
+					return true;
+					break;
+				case sf::Keyboard::Y:
+					txt += 'Y';
+					return true;
+					break;
+				case sf::Keyboard::Z:
+					txt += 'Z';
+					return true;
+					break;
+
+				default:
+					break;
+			}
+		}
+		return false;
+	}
+	
 	CheckBox::CheckBox(sf::Vector2f pos, sf::Vector2f size, bool state) : Element(pos, size), state(state)
 	{
 		
@@ -180,34 +302,19 @@ namespace UI
 		isVisible = false;
 	}
 	
+	PopUp::~PopUp()
+	{
+		
+	}
+	
 	void PopUp::draw(sf::RenderWindow * window)
 	{
-		if(isVisible)
-		{
-			drawRect(window, pos, size, sf::Color(255,255,255,127), sf::Color(255,255,255,127));
-			drawText(window, sf::Vector2f(size.x/2, size.y/2), "Exit? Y/N", 40, sf::Color::Blue, ALIGN_CENTER);
-		}
+		Console::getConsole().log("dummy draw?\n");
 	}
 	
 	bool PopUp::onEvent(sf::Event & event)
 	{
-		if(isVisible)
-		{
-			if(event.type == sf::Event::KeyPressed)
-			{
-				if(event.key.code == sf::Keyboard::Y)
-				{
-					answer = true;
-					return true;
-				}
-				else if(event.key.code == sf::Keyboard::N)
-				{
-					answer = false;
-					isVisible = false;
-					return true;
-				}
-			}
-		}
+		Console::getConsole().log("dummy event?\n");
 		return false;
 	}
 	
