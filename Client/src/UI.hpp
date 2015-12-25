@@ -103,7 +103,8 @@ namespace UI
 	{
 		public:
 			std::string txt;
-			EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt);
+			sf::Color borderColor, insideColor, txtColor;
+			EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt, sf::Color borderColor, sf::Color insideColor, sf::Color txtColor);
 			
 			void draw(sf::RenderWindow * window);
 			

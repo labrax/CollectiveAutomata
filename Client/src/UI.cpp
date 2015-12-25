@@ -125,17 +125,18 @@ namespace UI
 		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
 	}
 	
-	EditBox::EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt) : Element(pos, size), txt(txt)
+	EditBox::EditBox(sf::Vector2f pos, sf::Vector2f size, std::string txt, sf::Color borderColor, sf::Color insideColor, sf::Color txtColor) : 
+		Element(pos, size), txt(txt), borderColor(borderColor), insideColor(insideColor), txtColor(txtColor)
 	{
 		
 	}
 	
 	void EditBox::draw(sf::RenderWindow * window)
 	{
-		drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, sf::Color(192,192,192));
+		drawRect(window, pos, sf::Vector2f(size.x+2, size.y+2), sf::Color::Black, borderColor);
 		drawRect(window, pos, sf::Vector2f(size.x+1, size.y+1), sf::Color::Black, sf::Color(224,224,224));
-		drawRect(window, pos, sf::Vector2f(size.x, size.y), sf::Color(32,32,32), sf::Color(192,192,192));
-		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, sf::Color(255,255,255));
+		drawRect(window, pos, sf::Vector2f(size.x, size.y), insideColor, borderColor);
+		drawText(window, sf::Vector2f(pos.x+3, pos.y-3), txt, size.y, txtColor);
 	}
 	
 	bool EditBox::onEvent(sf::Event & event)
@@ -145,7 +146,8 @@ namespace UI
 			switch(event.key.code)
 			{
 				case sf::Keyboard::BackSpace:
-					//TODO: remover um caracter
+					if(txt.size() > 0)
+						txt.resize(txt.size()-1);
 					return true;
 					break;
 				case sf::Keyboard::A:
@@ -229,7 +231,10 @@ namespace UI
 					return true;
 					break;
 				case sf::Keyboard::U:
-					txt += 'U';
+					if(event.key.control)
+						txt.resize(0);
+					else
+						txt += 'U';
 					return true;
 					break;
 				case sf::Keyboard::V:
@@ -252,7 +257,60 @@ namespace UI
 					txt += 'Z';
 					return true;
 					break;
-
+				case sf::Keyboard::Space:
+					txt += ' ';
+					return true;
+				break;
+				case sf::Keyboard::Num0:
+				case sf::Keyboard::Numpad0:
+					txt += '0';
+					return true;
+				break;
+				case sf::Keyboard::Num1:
+				case sf::Keyboard::Numpad1:
+					txt += '1';
+					return true;
+				break;
+				case sf::Keyboard::Num2:
+				case sf::Keyboard::Numpad2:
+					txt += '2';
+					return true;
+				break;
+				case sf::Keyboard::Num3:
+				case sf::Keyboard::Numpad3:
+					txt += '3';
+					return true;
+				break;
+				case sf::Keyboard::Num4:
+				case sf::Keyboard::Numpad4:
+					txt += '4';
+					return true;
+				break;
+				case sf::Keyboard::Num5:
+				case sf::Keyboard::Numpad5:
+					txt += '5';
+					return true;
+				break;
+				case sf::Keyboard::Num6:
+				case sf::Keyboard::Numpad6:
+					txt += '6';
+					return true;
+				break;
+				case sf::Keyboard::Num7:
+				case sf::Keyboard::Numpad7:
+					txt += '7';
+					return true;
+				break;
+				case sf::Keyboard::Num8:
+				case sf::Keyboard::Numpad8:
+					txt += '8';
+					return true;
+				break;
+				case sf::Keyboard::Num9:
+				case sf::Keyboard::Numpad9:
+					txt += '9';
+					return true;
+				break;
 				default:
 					break;
 			}
