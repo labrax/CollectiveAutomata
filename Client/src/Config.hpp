@@ -25,6 +25,7 @@ namespace config {
 	extern unsigned int frameratelimit, screen_height, screen_width;
 	//player console
 	extern sf::Color color_inside, color_border, color_text;
+	extern unsigned int txt_size;
 }
 
 #endif

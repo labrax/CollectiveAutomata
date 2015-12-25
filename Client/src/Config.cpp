@@ -26,4 +26,6 @@ namespace config
 	sf::Color color_inside(32, 32, 32, 128);
 	sf::Color color_border(192, 192, 192, 128);
 	sf::Color color_text(32, 32, 200);
+	
+	unsigned int txt_size = 15;
 }
