@@ -62,7 +62,7 @@ void Screen::resumeDraw()
 	paused = false;
 }
 
-void Screen::draw(GameMatrix * gm)
+void Screen::draw(GameWindow * gm)
 {
 	window->clear();
 	//if(paused == true)

@@ -8,13 +8,14 @@
 #include "Game.hpp"
 
 Game::Game() {
-	gm = new GameMatrix(sf::Vector2f(0, 0), sf::Vector2f(0, 0), config::width, config::height);
+	gm = new GameWindow(sf::Vector2f(0, 0), sf::Vector2f(0, 0), config::width, config::height);
 	gm->randomFill();
-	screen = new Screen(gm);
 	
 	PlayerConsole * pc = new PlayerConsole();
-	
 	gm->addElement(pc, false, false);
+	
+	screen = new Screen(gm);
+	
 	ih = new InputHandler();
 	//net = new Network();
 }
@@ -33,7 +34,7 @@ void Game::run() {
 	sf::Clock clock;
 	while(isRunning) {
 		//network
-		//gamematrix
+		//GameWindow
 		gm->compute();
 		//input
 		ih->poolEvents(screen);

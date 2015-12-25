@@ -12,13 +12,13 @@
 #include "Config.hpp"
 
 #include "InputHandler.hpp"
-#include "GameMatrix.hpp"
+#include "GameWindow.hpp"
 #include "Screen.hpp"
 
 class Game
 {
 private:
-	GameMatrix * gm;
+	GameWindow * gm;
 	Screen * screen;
 	InputHandler * ih;
 	//Network * net;

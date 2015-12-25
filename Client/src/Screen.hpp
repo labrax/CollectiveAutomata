@@ -15,7 +15,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "GameMatrix.hpp"
+#include "GameWindow.hpp"
 #include "Config.hpp"
 #include "Console.hpp"
 
@@ -43,7 +43,7 @@ public:
 	void stopDraw();
 	void resumeDraw();
 	
-	void draw(GameMatrix * gm);
+	void draw(GameWindow * gm);
 	
 	void onEvent(sf::Event & event);
 	void onResize(sf::Vector2f & new_size);
