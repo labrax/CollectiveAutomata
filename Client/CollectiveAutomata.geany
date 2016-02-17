@@ -1,0 +1,68 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=CollectiveAutomata
+base_path=/home/vroth/Git Repositories/CollectiveAutomata/Client
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=2
+FILE_NAME_0=578;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGameWindow.cpp;0;4
+FILE_NAME_1=437;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGameWindow.hpp;0;4
+FILE_NAME_2=4926;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGameUI.cpp;0;4
+FILE_NAME_3=2415;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGameUI.hpp;0;4
+FILE_NAME_4=1221;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FScreen.cpp;0;4
+FILE_NAME_5=837;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FScreen.hpp;0;4
+FILE_NAME_6=807;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FUI.cpp;0;4
+FILE_NAME_7=2164;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FUI.hpp;0;4
+FILE_NAME_8=517;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FConfig.hpp;0;4
+FILE_NAME_9=182;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGame.cpp;0;4
+FILE_NAME_10=300;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FGame.hpp;0;4
+FILE_NAME_11=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fvroth%2FGit%20Repositories%2FCollectiveAutomata%2FClient%2Fsrc%2FConfig.cpp;0;4
+
+[VTE]
+last_dir=/home/vroth/Git Repositories/CollectiveAutomata/Client
+
+[build-menu]
+NF_00_LB=_Make
+NF_00_CM=make
+NF_00_WD=%d/..
+EX_00_LB=_Execute
+EX_00_CM=make run
+EX_00_WD=%d/..
+C++FT_00_LB=_Compile
+C++FT_00_CM=make obj/"%e.o"
+C++FT_00_WD=%d/..
+C++FT_01_LB=_Build
+C++FT_01_CM=make
+C++FT_01_WD=%d/..
+filetypes=C++;
+C++FT_02_LB=_Run
+C++FT_02_CM=make run
+C++FT_02_WD=%d/..
+NF_03_LB=_Make Clean
+NF_03_CM=make clean
+NF_03_WD=%d/..
+NF_01_LB=Make Custom _Target...
+NF_01_CM=make 
+NF_01_WD=%d/..
+NF_02_LB=Make _Object
+NF_02_CM=make obj/"%e.o"
+NF_02_WD=%d/..
