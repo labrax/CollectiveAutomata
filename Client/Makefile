@@ -7,8 +7,8 @@ OPTION := -Wall -g
 
 ARCH := $(shell getconf LONG_BIT)
 
-LD_FLAGS := $(OPTION) -LSFML-2.3.2x$(ARCH)/lib -ljpeg -lxcb-util -lxcb-image -lsfml-system -lsfml-window -lsfml-graphics -fopenmp
-CC_FLAGS := $(OPTION) -ISFML-2.3.2x$(ARCH)/include -fopenmp
+LD_FLAGS := $(OPTION) -LSFML-2.3/lib -lsfml-system -lsfml-window -lsfml-graphics -fopenmp
+CC_FLAGS := $(OPTION) -ISFML-2.3/include -fopenmp
 
 all: client
 
